@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.example.sharingparking.widget.DragLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drag_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    tools:context="com.example.sharingparking.activity.RegisterActivity">
+
+    <!--下层 左边的布局 -->
+    <include layout="@layout/layout_left_view"/>
+    <!--上层 右边的主布局-->
+    <com.example.sharingparking.widget.CustomRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFFF">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <RelativeLayout
+                android:id="@+id/rl_title"
+                android:layout_width="match_parent"
+                android:layout_height="49dp"
+                android:gravity="bottom"
+                android:background="@color/cornflowerblue">
+
+                <include layout="@layout/bar_main_layout"/>
+
+            </RelativeLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <fragment
+                    android:id="@+id/main_info_fragment"
+                    class="com.example.sharingparking.fragment.OneFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+            </FrameLayout>
+
+        </LinearLayout>
+
+
+    </com.example.sharingparking.widget.CustomRelativeLayout>
+
+</com.example.sharingparking.widget.DragLayout>

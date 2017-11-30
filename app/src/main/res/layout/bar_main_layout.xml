@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/common_bar"
+                android:layout_width="match_parent"
+                android:layout_height="49dp"
+                android:background="@color/cornflowerblue">
+
+    <Button
+        android:id="@+id/btn_show_left_menu"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/main_menu"/>
+
+    <include layout="@layout/common_bar_layout"/>
+
+
+
+</RelativeLayout>
