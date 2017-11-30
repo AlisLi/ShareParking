@@ -30,7 +30,6 @@ import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 import okhttp3.Call;
 
-import static com.example.sharingparking.R.drawable.bt_register;
 import static com.example.sharingparking.common.Constans.NET_URL_HEADER;
 
 /**
@@ -100,24 +99,29 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                         @Override
                                         public void onError(Call call, Exception e, int id) {
                                             e.printStackTrace();
-                                            Toast.makeText(RegisterActivity.this,"注册失败",Toast.LENGTH_LONG).show();
+                                            Toast.makeText(RegisterActivity.this,"注册异常",Toast.LENGTH_LONG).show();
                                         }
 
                                         @Override
                                         public void onResponse(String response, int id) {
-                                            if(response.equals("注册成功")){
+                                            if("注册成功".equals(response)){
                                                 //如果服务器验证成功，跳转到主界面
                                                 Toast.makeText(RegisterActivity.this,"注册成功",
                                                         Toast.LENGTH_SHORT).show();
                                                 Intent intent = new Intent(RegisterActivity.this,MainActivity.class);
+                                                Bundle bundle = new Bundle();
+                                                //传入用户名
+                                                bundle.putString("userName",mPhoneString);
                                                 startActivity(intent);
                                                 finish();
-                                            }else{
-                                                //否则提示已经注册
+                                            }else if("已经注册".equals(response)){
+                                                //提示已经注册
                                                 Toast.makeText(RegisterActivity.this,"注册失败，该手机号已经注册",
                                                         Toast.LENGTH_SHORT).show();
+                                            }else{
+                                                Toast.makeText(RegisterActivity.this,"注册失败!",
+                                                        Toast.LENGTH_SHORT).show();
                                             }
-                                            Toast.makeText(RegisterActivity.this,response.toString(),Toast.LENGTH_LONG).show();
                                         }
                                     });
                         }else if(event == SMSSDK.EVENT_GET_VERIFICATION_CODE){

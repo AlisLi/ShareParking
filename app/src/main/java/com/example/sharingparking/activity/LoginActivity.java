@@ -10,9 +10,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.sharingparking.R;
 import com.example.sharingparking.SysApplication;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import okhttp3.Call;
+
+import static com.example.sharingparking.common.Constans.NET_URL_HEADER;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -44,23 +51,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btn_login_register:
-                /*//只支持5.0以上
-                //Button和TextView要强制转换为View，只支持View
-                Pair<View,String> registerPair = Pair.create((View) btnRegister,getString(R.string.register));
-                Pair<View,String> loginPair = Pair.create((View)btnLogin,getString(R.string.login));
-                Pair<View,String> forgetPsw = Pair.create((View)txtForgetPsw,getString(R.string.forget_password));
+                startActivity(new Intent(this,RegisterActivity.class));
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    //登录按钮消失
-                    btnLogin.setVisibility(View.GONE);
-                    txtForgetPsw.setVisibility(View.GONE);
-                    //注册按钮的过度动画
-                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,registerPair,loginPair,forgetPsw);
-                    startActivity(new Intent(this, RegisterActivity.class), options.toBundle());
-                } else {
-
-                }*/
-                startActivity(new Intent(this, RegisterActivity.class));
                 break;
             case R.id.btn_login:
                 //explode: 转场特效
@@ -70,8 +62,40 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 getWindow().setExitTransition(explode);
                 getWindow().setEnterTransition(explode);
                 ActivityOptionsCompat aoc = ActivityOptionsCompat.makeSceneTransitionAnimation(this);
-                Intent intent = new Intent(this,MainActivity.class);
-                startActivity(intent,aoc.toBundle());
+
+                OkHttpUtils
+                        .post()
+                        .url(NET_URL_HEADER + "UserServlet")
+                        .addParams("phoneNumber",etLoginUsername.getText().toString())
+                        .addParams("password",etLoginPassword.getText().toString())
+                        .addParams("method","login")
+                        .build()
+                        .execute(new StringCallback() {
+                            @Override
+                            public void onError(Call call, Exception e, int id) {
+                                Toast.makeText(LoginActivity.this,"登录异常!",Toast.LENGTH_LONG).show();
+                            }
+
+                            @Override
+                            public void onResponse(String response, int id) {
+                                if("没有注册".equals(response)){
+                                    Toast.makeText(LoginActivity.this,"未注册，请先注册！",Toast.LENGTH_LONG).show();
+                                }else if("密码错误".equals(response)){
+                                    Toast.makeText(LoginActivity.this,"密码错误！",Toast.LENGTH_LONG).show();
+                                }else if("登录成功".equals(response)){
+                                    Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                                    Bundle bundle = new Bundle();
+                                    /**
+                                     * 用户名暂时用手机号代替
+                                     * 传入手机号
+                                     */
+                                    bundle.putString("userName",etLoginUsername.getText().toString());
+                                    startActivity(intent,aoc.toBundle());
+                                }else {
+                                    Toast.makeText(LoginActivity.this,"登录失败",Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
 
                 break;
         }
