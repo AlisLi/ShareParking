@@ -1,3 +1,6 @@
+configurations.all {
+    resolutionStrategy.force 'com.android.support:support-annotations:23.1.0'
+}
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 
@@ -49,4 +52,6 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.9.1'
     compile 'com.zhy:okhttputils:2.6.2'
     compile 'com.google.code.gson:gson:2.6.2'
+    compile 'com.zyao89:zloading:1.0.11'
+
 }

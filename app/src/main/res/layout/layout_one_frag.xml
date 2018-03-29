@@ -14,34 +14,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/main_top_picture"/>
-
-        <!--<com.example.sharingparking.widget.ViewFlow
-            android:id="@+id/view_flow"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-        &lt;!&ndash;设置小圆点&ndash;&gt;
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:gravity="center"
-            android:paddingBottom="3dp"
-            android:background="@color/transparent">
-
-            <com.example.sharingparking.widget.CircleFlowIndicator
-                android:id="@+id/view_flow_index"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|bottom"
-                app:activeColor="#ff0000"
-                app:activeType="fill"
-                app:circleSeparation="20dp"
-                app:inactiveColor="#ffffff"
-                app:inactiveType="fill"
-                app:radius="4dp"/>
-
-        </FrameLayout>-->
     </FrameLayout>
 
     <View
@@ -57,7 +29,6 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:id="@+id/rent_parking_message"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -71,7 +42,8 @@
                 android:background="@drawable/bg_mian_click"
                 android:text="@string/rent_parking_message"
                 android:textColor="@color/white"
-                android:textSize="20sp"/>
+                android:textSize="20sp"
+                android:onClick="toRentMessage"/>
 
         </LinearLayout>
 
@@ -81,7 +53,6 @@
             android:background="@color/gainsboro"/>
 
         <LinearLayout
-            android:id="@+id/my_parking"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -94,7 +65,8 @@
                 android:textColor="@color/white"
                 android:background="@drawable/bg_mian_click"
                 android:text="@string/my_parking"
-                android:textSize="20sp"/>
+                android:textSize="20sp"
+                android:onClick="toMyParking"/>
 
         </LinearLayout>
 
@@ -106,7 +78,6 @@
         android:background="@color/gainsboro"/>
 
     <LinearLayout
-        android:id="@+id/ordering_parking"
         android:padding="2dp"
         android:layout_width="match_parent"
         android:layout_height="200dp"
@@ -118,7 +89,8 @@
             android:textSize="24sp"
             android:textColor="@color/white"
             android:background="@drawable/bg_mian_click"
-            android:text="@string/ordering_parking"/>
+            android:text="@string/ordering_parking"
+            android:onClick="toOrderingParking"/>
 
     </LinearLayout>
 

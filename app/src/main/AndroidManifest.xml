@@ -5,6 +5,11 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+    <!--获取蓝牙权限-->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -44,6 +49,12 @@
         <activity android:name=".activity.SettingActivity">
         </activity>
         <activity android:name=".activity.BenefitActivity">
+        </activity>
+        <activity android:name=".activity.RegisterParkingActivity">
+        </activity>
+        <activity android:name=".activity.RentMessageActivity">
+        </activity>
+        <activity android:name=".activity.ControlParkingActivity">
         </activity>
 
         <!-- 获取验证码 -->

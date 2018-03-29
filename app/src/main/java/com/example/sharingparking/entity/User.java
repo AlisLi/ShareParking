@@ -6,10 +6,12 @@ package com.example.sharingparking.entity;
  */
 
 public class User {
+    private int userId;     //用户ID
     private String userName;    //用户名
     private String phoneNumber; //手机号
     private String password;    //密码
-    private int age;            //年龄
+    private double userMoney;   //余额
+    private String lastLoginTime;   //最后一次登陆时间
 
     public String getUserName() {
         return userName;
@@ -35,11 +37,27 @@ public class User {
         this.password = password;
     }
 
-    public int getAge() {
-        return age;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public double getUserMoney() {
+        return userMoney;
+    }
+
+    public void setUserMoney(double userMoney) {
+        this.userMoney = userMoney;
+    }
+
+    public String getLastLoginTime() {
+        return lastLoginTime;
+    }
+
+    public void setLastLoginTime(String lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
     }
 }

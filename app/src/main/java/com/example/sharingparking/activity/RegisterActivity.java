@@ -23,14 +23,22 @@ import android.widget.Toast;
 
 import com.example.sharingparking.R;
 import com.example.sharingparking.SysApplication;
+import com.example.sharingparking.entity.User;
+import com.example.sharingparking.utils.Utility;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
+
+import java.util.List;
 
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 import okhttp3.Call;
 
-import static com.example.sharingparking.common.Constans.NET_URL_HEADER;
+import static com.example.sharingparking.common.Common.NET_URL_HEADER;
+import static com.example.sharingparking.common.Common.REGISTER_USER_ERROR;
+import static com.example.sharingparking.common.Common.REGISTER_USER_EXIST;
+import static com.example.sharingparking.common.Common.REGISTER_USER_FAIL;
+
 
 /**
  * Created by Lizhiguo on 2017/10/20.
@@ -91,7 +99,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                     .url(NET_URL_HEADER + "UserServlet")
                                     .addParams("userName", mPhoneString)
                                     .addParams("password", etRegisterPassword.getText().toString())
-                                    .addParams("age", "0")
                                     .addParams("phoneNumber",mPhoneString)
                                     .addParams("method","addUser")
                                     .build()
@@ -99,27 +106,29 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                         @Override
                                         public void onError(Call call, Exception e, int id) {
                                             e.printStackTrace();
-                                            Toast.makeText(RegisterActivity.this,"注册异常",Toast.LENGTH_LONG).show();
+                                            Toast.makeText(RegisterActivity.this,REGISTER_USER_ERROR,Toast.LENGTH_LONG).show();
                                         }
 
                                         @Override
                                         public void onResponse(String response, int id) {
-                                            if("注册成功".equals(response)){
+                                            List<User> list = Utility.handleUserResponse(response);
+                                            if(list != null && !REGISTER_USER_EXIST.equals(response)){
                                                 //如果服务器验证成功，跳转到主界面
                                                 Toast.makeText(RegisterActivity.this,"注册成功",
                                                         Toast.LENGTH_SHORT).show();
                                                 Intent intent = new Intent(RegisterActivity.this,MainActivity.class);
-                                                Bundle bundle = new Bundle();
+                                                User user = list.get(0);
                                                 //传入用户名
-                                                bundle.putString("userName",mPhoneString);
+                                                intent.putExtra("userName",user.getUserName());
+                                                intent.putExtra("userId",user.getUserId());
                                                 startActivity(intent);
                                                 finish();
-                                            }else if("已经注册".equals(response)){
+                                            }else if(REGISTER_USER_EXIST.equals(response)){
                                                 //提示已经注册
                                                 Toast.makeText(RegisterActivity.this,"注册失败，该手机号已经注册",
                                                         Toast.LENGTH_SHORT).show();
                                             }else{
-                                                Toast.makeText(RegisterActivity.this,"注册失败!",
+                                                Toast.makeText(RegisterActivity.this,REGISTER_USER_FAIL,
                                                         Toast.LENGTH_SHORT).show();
                                             }
                                         }

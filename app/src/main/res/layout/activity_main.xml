@@ -35,15 +35,10 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <fragment
-                    android:id="@+id/main_info_fragment"
-                    class="com.example.sharingparking.fragment.OneFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                <include layout="@layout/layout_one_frag"/>
             </FrameLayout>
 
         </LinearLayout>
-
 
     </com.example.sharingparking.widget.CustomRelativeLayout>
 

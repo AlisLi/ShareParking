@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.transition.Explode;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.sharingparking.R;
 import com.example.sharingparking.SysApplication;
@@ -17,7 +18,12 @@ import com.example.sharingparking.SysApplication;
  * Created by Lizhiguo on 2017/10/19.
  */
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity{
+
+    private TextView txtUserName;   //用户名
+
+    private String userName;    //用户名
+    private int userId;     //用户ID
 
 
 
@@ -42,7 +48,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 初始化控件
      */
     private void initView(){
+        //接收前一个活动传的用户名,用户ID
+        Intent intent = getIntent();
+        userName = intent.getStringExtra("username");
+        userId = intent.getIntExtra("userId",0);
 
+        txtUserName = (TextView) findViewById(R.id.txt_username);
+        txtUserName.setText(userName);
     }
 
 
@@ -68,7 +80,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //跳转到我的车位
     public void showParking(View view){
         Intent intent = new Intent(this,ParkingActivity.class);
-        startActivity(intent);
+
+        startActivity(sendUserId(intent));
     }
 
     //跳转到设置
@@ -77,20 +90,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(intent);
     }
 
-    /**
-     * 重写控件点击事件
-     * @param v
-     */
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.btn_show_left_menu:
-
-                break;
-            default:
-                break;
-        }
+    //从主界面跳转到租用详情
+    public void toRentMessage(View view){
+        Intent intent = new Intent(this,RentMessageActivity.class);
+        startActivity(intent);
     }
+
+    //从主界面跳转到我的车位
+    public void toMyParking(View view){
+        showParking(view);
+    }
+
+    //从主界面跳转到预定车位
+    public void toOrderingParking(View view){
+
+    }
+
+    /**
+     * 将用户ID传入下一个活动
+     * @param intent
+     * @return
+     */
+    private Intent sendUserId(Intent intent){
+        Bundle bundle = new Bundle();
+        bundle.putInt("userId",userId);
+        intent.putExtra("data",bundle);
+
+        return intent;
+    }
+
+
 
     //退出程序
     @Override

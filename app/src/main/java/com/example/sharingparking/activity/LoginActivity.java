@@ -14,12 +14,21 @@ import android.widget.Toast;
 
 import com.example.sharingparking.R;
 import com.example.sharingparking.SysApplication;
+import com.example.sharingparking.entity.User;
+import com.example.sharingparking.utils.Utility;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import java.util.List;
+
 import okhttp3.Call;
 
-import static com.example.sharingparking.common.Constans.NET_URL_HEADER;
+import static com.example.sharingparking.common.Common.LOGIN_ERROR;
+import static com.example.sharingparking.common.Common.LOGIN_FAIL;
+import static com.example.sharingparking.common.Common.LOGIN_NO_REGISTER;
+import static com.example.sharingparking.common.Common.LOGIN_PASSWORD_MISTAKE;
+import static com.example.sharingparking.common.Common.NET_URL_HEADER;
+
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -35,7 +44,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        //添加活动到ActivityList中
+        //添加活动到ActivityList中(安全退出)
         SysApplication.getInstance().addActivity(this);
 
 
@@ -63,6 +72,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 getWindow().setEnterTransition(explode);
                 ActivityOptionsCompat aoc = ActivityOptionsCompat.makeSceneTransitionAnimation(this);
 
+                //临时加入
+                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                startActivity(intent);
+
                 OkHttpUtils
                         .post()
                         .url(NET_URL_HEADER + "UserServlet")
@@ -73,26 +86,28 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         .execute(new StringCallback() {
                             @Override
                             public void onError(Call call, Exception e, int id) {
-                                Toast.makeText(LoginActivity.this,"登录异常!",Toast.LENGTH_LONG).show();
+                                Toast.makeText(LoginActivity.this,LOGIN_ERROR,Toast.LENGTH_LONG).show();
                             }
 
                             @Override
                             public void onResponse(String response, int id) {
-                                if("没有注册".equals(response)){
-                                    Toast.makeText(LoginActivity.this,"未注册，请先注册！",Toast.LENGTH_LONG).show();
-                                }else if("密码错误".equals(response)){
-                                    Toast.makeText(LoginActivity.this,"密码错误！",Toast.LENGTH_LONG).show();
-                                }else if("登录成功".equals(response)){
+                                List<User> list = Utility.handleUserResponse(response);
+                                if(LOGIN_NO_REGISTER.equals(response)){
+                                    Toast.makeText(LoginActivity.this,LOGIN_NO_REGISTER,Toast.LENGTH_LONG).show();
+                                }else if(LOGIN_PASSWORD_MISTAKE.equals(response)){
+                                    Toast.makeText(LoginActivity.this,LOGIN_PASSWORD_MISTAKE,Toast.LENGTH_LONG).show();
+                                }else if(list != null){
                                     Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                                    Bundle bundle = new Bundle();
                                     /**
                                      * 用户名暂时用手机号代替
                                      * 传入手机号
                                      */
-                                    bundle.putString("userName",etLoginUsername.getText().toString());
+                                    User user = list.get(0);
+                                    intent.putExtra("userName",user.getUserName());
+                                    intent.putExtra("userId",user.getUserId());
                                     startActivity(intent,aoc.toBundle());
                                 }else {
-                                    Toast.makeText(LoginActivity.this,"登录失败",Toast.LENGTH_LONG).show();
+                                    Toast.makeText(LoginActivity.this,LOGIN_FAIL,Toast.LENGTH_LONG).show();
                                 }
                             }
                         });
