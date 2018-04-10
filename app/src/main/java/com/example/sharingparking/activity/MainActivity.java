@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.sharingparking.R;
 import com.example.sharingparking.SysApplication;
+import com.example.sharingparking.baidumap.MapActivity;
 
 /**
  * Created by Lizhiguo on 2017/10/19.
@@ -24,8 +25,6 @@ public class MainActivity extends AppCompatActivity{
 
     private String userName;    //用户名
     private int userId;     //用户ID
-
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -103,7 +102,8 @@ public class MainActivity extends AppCompatActivity{
 
     //从主界面跳转到预定车位
     public void toOrderingParking(View view){
-
+        Intent intent = new Intent(this, MapActivity.class);
+        startActivity(intent);
     }
 
     /**

@@ -7,7 +7,7 @@ package com.example.sharingparking.common;
 public class Common {
 
     //访问服务器的url前置部分
-    public static final String NET_URL_HEADER = "http://superrocket.cn:8080/sharepark/";
+    public static final String NET_URL_HEADER = "https://superrocket.cn/sharepark/";
 
     public static final String TAG_SHOW = "lzg";
 

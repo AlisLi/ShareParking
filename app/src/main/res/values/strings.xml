@@ -12,7 +12,6 @@
     <string name="phone_number">手机号</string>
 
 
-
     <string name="rent_parking_message">租用详情</string>
     <string name="my_parking">我的车位</string>
     <string name="ordering_parking">预定车位</string>
@@ -51,4 +50,6 @@
     <string name="up">上升</string>
     <string name="down">下降</string>
     <string name="not_connected">蓝牙未连接</string>
+    <string name="reconnect">重新连接</string>
+
 </resources>

@@ -25,6 +25,7 @@ import com.example.sharingparking.R;
 import com.example.sharingparking.SysApplication;
 import com.example.sharingparking.entity.User;
 import com.example.sharingparking.utils.Utility;
+import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -33,6 +34,7 @@ import java.util.List;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 import okhttp3.Call;
+import okhttp3.MediaType;
 
 import static com.example.sharingparking.common.Common.NET_URL_HEADER;
 import static com.example.sharingparking.common.Common.REGISTER_USER_ERROR;
@@ -66,6 +68,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     private EventHandler eventHandler;      //注册短信验证成功后的回调Handle
 
+    private String TAG = "RegisterActivity";
+
     //用于更新UI的句柄
     private Handler handle = new Handler(){
         @Override
@@ -95,17 +99,16 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         if(event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE){
                             Log.d("test_message","4");
                             OkHttpUtils
-                                    .post()
-                                    .url(NET_URL_HEADER + "UserServlet")
-                                    .addParams("userName", mPhoneString)
-                                    .addParams("password", etRegisterPassword.getText().toString())
-                                    .addParams("phoneNumber",mPhoneString)
-                                    .addParams("method","addUser")
+                                    .postString()
+                                    .url(NET_URL_HEADER + "user/register")
+                                    .mediaType(MediaType.parse("application/json; charset=utf-8"))
+                                    .content(new Gson().toJson(new User(mPhoneString,mPhoneString,etRegisterPassword.getText().toString(),0)))
                                     .build()
                                     .execute(new StringCallback() {
                                         @Override
                                         public void onError(Call call, Exception e, int id) {
                                             e.printStackTrace();
+                                            Log.d(TAG,"连接异常！");
                                             Toast.makeText(RegisterActivity.this,REGISTER_USER_ERROR,Toast.LENGTH_LONG).show();
                                         }
 

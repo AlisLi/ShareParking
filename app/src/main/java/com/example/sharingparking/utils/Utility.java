@@ -1,6 +1,7 @@
 package com.example.sharingparking.utils;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.example.sharingparking.entity.BlueTooth;
 import com.example.sharingparking.entity.ParkingLock;
@@ -19,7 +20,7 @@ import java.util.List;
  */
 
 public class Utility {
-
+    public static final String UTILITY_TAG = "Utility";
     /**
      * 解析和处理用户Json数据
      * @param response
@@ -28,6 +29,7 @@ public class Utility {
     public static List<User> handleUserResponse(String response){
         if(!TextUtils.isEmpty(response)){
             try {
+                Log.d(UTILITY_TAG,"user : " + response);
                 List<User> list = new ArrayList<>();
                 JSONArray users = new JSONArray(response);
                 for(int i = 0;i < users.length();i++){
@@ -108,7 +110,6 @@ public class Utility {
             user.setPhoneNumber(jsonObject.getString("phoneNumber"));
             user.setPassword(jsonObject.getString("password"));
             user.setUserMoney(jsonObject.getDouble("userMoney"));
-            user.setLastLoginTime(jsonObject.getString("lastLoginTime"));
             return user;
         } catch (JSONException e) {
             e.printStackTrace();

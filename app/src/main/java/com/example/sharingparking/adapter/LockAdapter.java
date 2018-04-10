@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.sharingparking.R;
@@ -29,6 +30,7 @@ public class LockAdapter extends RecyclerView.Adapter<LockAdapter.ViewHolder>{
         TextView txtLockNo;
         TextView txtLockAddress;
         TextView txtLockState;
+        Button btnPublish;
 
         public ViewHolder(View view){
             super(view);
@@ -36,6 +38,8 @@ public class LockAdapter extends RecyclerView.Adapter<LockAdapter.ViewHolder>{
             txtLockNo = (TextView) view.findViewById(R.id.txt_lock_no);
             txtLockAddress = (TextView) view.findViewById(R.id.txt_lock_address);
             txtLockState = (TextView) view.findViewById(R.id.txt_lock_state);
+            btnPublish = (Button) view.findViewById(R.id.btn_publish);
+
         }
     }
 
@@ -63,8 +67,8 @@ public class LockAdapter extends RecyclerView.Adapter<LockAdapter.ViewHolder>{
         /**
          * 判断发布状态
          * 若为：未发布，则隐藏租用等信息
-         * 若为：已发布，则显示发布信息
-         * 若为：已租用，则显示租用者信息
+         * 若为：已发布，则显示发布信息,按钮变为取消发布
+         * 若为：已租用，则显示租用者信息,按钮变为取消发布
          */
 
 

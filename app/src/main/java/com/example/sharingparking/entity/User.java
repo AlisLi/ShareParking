@@ -11,7 +11,16 @@ public class User {
     private String phoneNumber; //手机号
     private String password;    //密码
     private double userMoney;   //余额
-    private String lastLoginTime;   //最后一次登陆时间
+
+    public User() {
+    }
+
+    public User(String userName, String phoneNumber, String password, double userMoney) {
+        this.userName = userName;
+        this.phoneNumber = phoneNumber;
+        this.password = password;
+        this.userMoney = userMoney;
+    }
 
     public String getUserName() {
         return userName;
@@ -53,11 +62,4 @@ public class User {
         this.userMoney = userMoney;
     }
 
-    public String getLastLoginTime() {
-        return lastLoginTime;
-    }
-
-    public void setLastLoginTime(String lastLoginTime) {
-        this.lastLoginTime = lastLoginTime;
-    }
 }

@@ -39,7 +39,7 @@ import java.util.UUID;
  * incoming connections, a thread for connecting with a device, and a
  * thread for performing data transmissions when connected.
  */
-public class BluetoothChatService {
+public class BluetoothChatService{
     // Debugging
     private static final String TAG = "BluetoothChatService";
     private static final boolean D = true;
@@ -64,10 +64,10 @@ public class BluetoothChatService {
     private int mState;
 
     // Constants that indicate the current connection state
-    public static final int STATE_NONE = 0;       // we're doing nothing
-    public static final int STATE_LISTEN = 1;     // now listening for incoming connections
-    public static final int STATE_CONNECTING = 2; // now initiating an outgoing connection
-    public static final int STATE_CONNECTED = 3;  // now connected to a remote device
+    public static final int STATE_NONE = 0;       // 蓝牙未连接
+    public static final int STATE_LISTEN = 1;     // 正在监听来的连接
+    public static final int STATE_CONNECTING = 2; // 正在连接
+    public static final int STATE_CONNECTED = 3;  // 已经连接
 
     /**
      * Constructor. Prepares a new MainActivity session.
@@ -88,7 +88,7 @@ public class BluetoothChatService {
         if (D) Log.d(TAG, "setState() " + mState + " -> " + state);
         mState = state;
 
-        // Give the new state to the Handler so the UI Activity can update
+        //通过Handle返回给主活动连接状态
         mHandler.obtainMessage(ControlParkingActivity.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
     }
 
@@ -394,6 +394,7 @@ public class BluetoothChatService {
 
             // Make a connection to the BluetoothSocket
             try {
+
                 // This is a blocking call and will only return on a
                 // successful connection or an exception
                 mmSocket.connect();
@@ -500,4 +501,5 @@ public class BluetoothChatService {
             }
         }
     }
+
 }

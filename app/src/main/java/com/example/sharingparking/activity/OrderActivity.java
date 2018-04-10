@@ -8,6 +8,7 @@ import com.example.sharingparking.R;
 import com.example.sharingparking.SysApplication;
 
 /**
+ * 活动：显示附近已发布的车位，预订车位
  * Created by Lizhiguo on 2017/11/29.
  */
 
