@@ -1,14 +1,12 @@
 package com.example.sharingparking.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.transition.Explode;
+import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.sharingparking.R;
@@ -20,6 +18,8 @@ import com.example.sharingparking.baidumap.MapActivity;
  */
 
 public class MainActivity extends AppCompatActivity{
+
+    private String TAG = "MainActivity";
 
     private TextView txtUserName;   //用户名
 
@@ -51,6 +51,8 @@ public class MainActivity extends AppCompatActivity{
         Intent intent = getIntent();
         userName = intent.getStringExtra("username");
         userId = intent.getIntExtra("userId",0);
+
+        Log.d(TAG,"userName：" + userName + "userId：" + userId);
 
         txtUserName = (TextView) findViewById(R.id.txt_username);
         txtUserName.setText(userName);
@@ -119,25 +121,10 @@ public class MainActivity extends AppCompatActivity{
         return intent;
     }
 
-
-
-    //退出程序
     @Override
     public void onBackPressed() {
-        //从xml文件中装载LinearLayout对象
-        LinearLayout finishLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.dialog_finish_app,null);
-        //程序退出提醒框
-        new AlertDialog.Builder(this).setView(finishLayout)
-                .setTitle("提示").setPositiveButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        }).setNegativeButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                SysApplication.getInstance().exit();
-            }
-        }).show();
+        super.onBackPressed();
+        //返回键，销毁所有活动
+        SysApplication.getInstance().exit();
     }
 }

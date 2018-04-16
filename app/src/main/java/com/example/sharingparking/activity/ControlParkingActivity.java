@@ -23,6 +23,14 @@ import com.zyao89.view.zloading.ZLoadingDialog;
 
 import java.util.Set;
 
+import static com.example.sharingparking.common.Common.LOCK_BAR_STATE;
+import static com.example.sharingparking.common.Common.LOCK_DOWN;
+import static com.example.sharingparking.common.Common.LOCK_DOWNING_STATE;
+import static com.example.sharingparking.common.Common.LOCK_DOWN_STATE;
+import static com.example.sharingparking.common.Common.LOCK_OVER_UP_STATE;
+import static com.example.sharingparking.common.Common.LOCK_UP;
+import static com.example.sharingparking.common.Common.LOCK_UPPING_STATE;
+import static com.example.sharingparking.common.Common.LOCK_UP_STATE;
 import static com.example.sharingparking.utils.CommonUtil.toast;
 import static com.zyao89.view.zloading.Z_TYPE.DOUBLE_CIRCLE;
 
@@ -172,7 +180,7 @@ public class ControlParkingActivity extends AppCompatActivity implements Bluetoo
      */
     public void up(View view){
         //发送‘1#’控制上升
-        sendMessage("1#");
+        sendMessage(LOCK_UP);
     }
 
     /**
@@ -180,7 +188,7 @@ public class ControlParkingActivity extends AppCompatActivity implements Bluetoo
      */
     public void down(View view){
         //发送‘0#’控制下降
-        sendMessage("0#");
+        sendMessage(LOCK_DOWN);
     }
 
     /**
@@ -246,31 +254,51 @@ public class ControlParkingActivity extends AppCompatActivity implements Bluetoo
                     String readMessage = new String(readBuf, 0, msg.arg1);
                     //读取数据
                     Log.d(TAG,readMessage);
-                    if("4".equals(readMessage)){
-                        Log.d(TAG,readMessage);
-                        if(!lockState.equals(readMessage)){
+
+                    if(LOCK_BAR_STATE.equals(readMessage)){
+                        //有障碍物
+                        toast(ControlParkingActivity.this,"上方有障碍物！");
+                        lockState = LOCK_BAR_STATE;
+                    }else {
+                        if(LOCK_DOWN_STATE.equals(lockState)){
+                            //锁处于0度状态
                             Log.d(TAG,readMessage);
-                            duringDialog("锁正在打开！");
+                            if(LOCK_UPPING_STATE.equals(readMessage)){
+                                //接收到上升回应值
+                                Log.d(TAG,readMessage);
+                                duringDialog("锁正在打开！");
+                                lockState = LOCK_UPPING_STATE;
+                            }
+                        }else if(LOCK_UPPING_STATE.equals(lockState)){
+                            //如果处于上升或下降状态
+                            if(LOCK_UP_STATE.equals(readMessage)){
+                                //上升成功
+                                dialog.cancel();
+                                duringDialog("打开成功");
+                                cancleSecondDialog();
+                                lockState = LOCK_UP_STATE;
+                            }else if(LOCK_DOWN_STATE.equals(readMessage)){
+                                //下降成功
+                                dialog.cancel();
+                                duringDialog("关闭成功");
+                                cancleSecondDialog();
+                                lockState = LOCK_DOWN_STATE;
+                            }else{
+                                //上升或者下降过程无操作
+                            }
+                        }else if(LOCK_UP_STATE.equals(lockState) || LOCK_OVER_UP_STATE.equals(lockState)){
+                            //锁处于90度或者大于90度
+                            if(LOCK_DOWNING_STATE.equals(readMessage)){
+                                //接收到正在下降回应值
+                                Log.d(TAG,readMessage);
+                                duringDialog("锁正在关闭！");
+                                lockState = LOCK_DOWNING_STATE;
+                            }
                         }
-                    }else if("1".equals(readMessage)){
-                        dialog.cancel();
-                        duringDialog("打开成功");
-                        cancleSecondDialog();
-                    }else if("5".equals(readMessage)){
-                        if(!lockState.equals(readMessage)){
-                            Log.d(TAG,readMessage);
-                            duringDialog("锁正在关闭！");
-                        }
-                    }else if("2".equals(readMessage)){
-                        dialog.cancel();
-                        duringDialog("关闭成功");
-                        cancleSecondDialog();
-                    }else if("3".equals(readMessage)){
-                        if(!lockState.equals(readMessage)){
-                            toast(ControlParkingActivity.this,"上方有障碍物！");
-                        }
+
+                        lockState = readMessage;
                     }
-                    lockState = readMessage;
+
                     break;
                 case MESSAGE_DEVICE_NAME:
                     // 保存已连接的设备名称

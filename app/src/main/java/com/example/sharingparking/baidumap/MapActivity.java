@@ -3,7 +3,6 @@ package com.example.sharingparking.baidumap;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -14,15 +13,12 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,7 +44,11 @@ import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.GeoCoder;
+import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.baidu.navisdk.adapter.BNCommonSettingParam;
 import com.baidu.navisdk.adapter.BNRoutePlanNode;
 import com.baidu.navisdk.adapter.BNaviSettingManager;
@@ -77,9 +77,8 @@ public class MapActivity extends AppCompatActivity implements BaiduMap.OnMarkerC
     FloatingActionButton dh;
     @BindView(R.id.mn)
     FloatingActionButton mn;
-    @BindView(R.id.registerCarParking)
-    FloatingActionButton registerCarParking;
 
+   // private AlertDialog dialog;
     private BaiduMap mBaiduMap;
     private LocationClient mLocationClient;
     private MyLoacationListener myLocationListener;
@@ -88,6 +87,8 @@ public class MapActivity extends AppCompatActivity implements BaiduMap.OnMarkerC
     private double mLatitude;
     private double mLongitude;
     private BitmapDescriptor mLoacationBitmap;
+    private String address= "";  //除图标外的地址
+    private String markerAddress = "";  //图标地址
 
     private MyOrentationListener myOrentationListener;
     private float mCurrentX;//当前位置
@@ -137,18 +138,6 @@ public class MapActivity extends AppCompatActivity implements BaiduMap.OnMarkerC
         if (initDirs()) {
             initNavigatin();
         }
-
-        //创建地理编码检索实例
-        GeoCoder geoCoder = GeoCoder.newInstance();
-
-    }
-
-    /**
-     * 经纬度或地址相互转换
-     * @param latLng
-     */
-    private void latlngToAddress(LatLng latLng) {
-        // 设置反地理经纬度坐标,请求位置时,需要一个经纬度
 
     }
 
@@ -375,13 +364,14 @@ public class MapActivity extends AppCompatActivity implements BaiduMap.OnMarkerC
 
         @Override
         public void onRoutePlanFailed() {
-
+            // TODO Auto-generated method stub
             Toast.makeText(MapActivity.this, "算路失败", Toast.LENGTH_SHORT).show();
         }
     }
 
 
     private boolean hasCompletePhoneAuth() {
+        // TODO Auto-generated method stub
 
         PackageManager pm = this.getPackageManager();
         for (String auth : authComArr) {
@@ -435,47 +425,17 @@ public class MapActivity extends AppCompatActivity implements BaiduMap.OnMarkerC
 
     }
 
-    //注册车位
-    public void registerCarParking(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = getLayoutInflater();
-        //获取自定义的布局
-        final View layout = inflater.inflate(R.layout.dialog, null);
-        builder.setView(layout);
-        builder.setTitle("注册车位");
-        //获取布局元素
-        TextView facilityID = (TextView) findViewById(R.id.facilityID);
-        EditText et_facilityID = (EditText) findViewById(R.id.et_facilityID);
-        TextView carParing_address = (TextView) findViewById(R.id.carParing_address);
-        EditText et_carParking_address = (EditText) findViewById(R.id.et_carParking_address);
-
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(getApplicationContext(), "注册车位成功", Toast.LENGTH_SHORT).show();
-            }
-        });
-        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface arg0, int arg1) {
-
-            }
-        });
-        final AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-
     //定位
     private void initLocation() {
 
         mLocationClient = new LocationClient(getApplicationContext());
         myLocationListener = new MyLoacationListener();
-        mLocationClient.registerLocationListener(myLocationListener);
+        mLocationClient.registerLocationListener(myLocationListener); //注册监听函数
 
         LocationClientOption options = new LocationClientOption();
         options.setCoorType("bd09ll");//坐标类型
         options.setIsNeedAddress(true);
+        options.setAddrType("all");
         options.setOpenGps(true);
         options.setScanSpan(1000);
 
@@ -495,7 +455,6 @@ public class MapActivity extends AppCompatActivity implements BaiduMap.OnMarkerC
         });
 
     }
-
 
    /* @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -586,33 +545,86 @@ public class MapActivity extends AppCompatActivity implements BaiduMap.OnMarkerC
     //覆盖物的点击事件
     @Override
     public boolean onMarkerClick(Marker marker) {
+        markerAddress = "";
         Bundle bundle = marker.getExtraInfo();
         MapCar car = (MapCar) bundle.getParcelable("car");
 
-        //生成一个TextView用于用户在地图中显示InfoWindow
-        TextView infoText = new TextView(getApplicationContext());
-        infoText.setBackgroundResource(R.mipmap.location_tips);
-        infoText.setPadding(30, 20, 30, 30);
-        infoText.setText("经度：" + car.getLongitude() + '\n' + "纬度：" + car.getLatitude() + '\n' + "地址：" + car.getName());
-
-        infoText.setTextColor(Color.parseColor("#FFFFFF"));
-
-        mBitmapWindow = BitmapDescriptorFactory.fromView(infoText);
         //将marker所在的经纬度的信息转化成屏幕上的坐标
         final LatLng lng = marker.getPosition();
-        Point p = mBaiduMap.getProjection().toScreenLocation(lng);
-        p.y -= 47;  //让弹框在Y轴偏移47
-        currentLatLng = mBaiduMap.getProjection().fromScreenLocation(p);
+        //获取经纬度
+        double latitude = lng.latitude;
+        double longitude = lng.longitude;
+        System.out.println("latitude = " + latitude + ",longitude = " + longitude);
+        //依据当前给出的经纬度获取该地地址信息
+       // LatLng point = new LatLng(latitude, longitude);
+        // 构建MarkerOption，用于在地图上添加Marker
+        // MarkerOptions options = new MarkerOptions().position(point).icon(mMarker);
+        // 在地图上添加Marker，并显示
+        // mBaiduMap.addOverlay(options);
 
-        //为弹出的InfoWindow添加点击事件
-        infoWindow = new InfoWindow(mBitmapWindow, currentLatLng, 0, new InfoWindow.OnInfoWindowClickListener() {
+        //实例化一个地理编码查询对象
+        GeoCoder geoCoder = GeoCoder.newInstance();
+        //设置反地理编码位置坐标
+        ReverseGeoCodeOption op = new ReverseGeoCodeOption();
+        op.location(lng);
+        //发起反地理编码请求(经纬度->地址信息)
+        geoCoder.reverseGeoCode(op);
+
+        geoCoder.setOnGetGeoCodeResultListener(new OnGetGeoCoderResultListener() {
+            String  temporaryMarkerAddress;
+            //经纬度->地址信息
             @Override
-            public void onInfoWindowClick() {
-                mBaiduMap.hideInfoWindow();
-                stopAnimation();
+            public void onGetReverseGeoCodeResult(ReverseGeoCodeResult arg0) {
+
+                temporaryMarkerAddress = arg0.getAddressDetail().province
+                        + arg0.getAddressDetail().city
+                        + arg0.getAddressDetail().district
+                        + arg0.getAddressDetail().street
+                        + arg0.getAddressDetail().streetNumber;
+                System.out.println("markerAddress = " + temporaryMarkerAddress);
+                markerAddress = temporaryMarkerAddress;
+            }
+
+            @Override
+            public void onGetGeoCodeResult(GeoCodeResult arg0) {
             }
         });
-        mBaiduMap.showInfoWindow(infoWindow);
+
+        //将infoWindow中的内容设置放在线程中，否则第一次点击覆盖物时为空值
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(markerAddress == ""){}
+                //生成一个TextView用于用户在地图中显示InfoWindow
+                TextView infoText = new TextView(getApplicationContext());
+                infoText.setBackgroundResource(R.mipmap.location_tips);
+                infoText.setPadding(30, 20, 30, 30);
+                infoText.setText("经度：" + longitude + '\n' + "纬度：" + latitude + "\n地址：" + markerAddress);
+                System.out.println("..." + markerAddress);
+                // infoText.setText("经度：" + car.getLongitude() + '\n' + "纬度：" + car.getLatitude() + "\n地址：" + markerAddress);
+                // infoText.setText(stringBuffer);
+                infoText.setTextColor(Color.parseColor("#FFFFFF"));
+
+                mBitmapWindow = BitmapDescriptorFactory.fromView(infoText);
+
+                Point p = mBaiduMap.getProjection().toScreenLocation(lng);
+                //让弹框在Y轴偏移47
+                p.y -= 47;
+                //定义用于显示该InfoWindow的坐标点
+                currentLatLng = mBaiduMap.getProjection().fromScreenLocation(p);
+
+                //为弹出的InfoWindow添加点击事件
+                infoWindow = new InfoWindow(mBitmapWindow, currentLatLng, 0, new InfoWindow.OnInfoWindowClickListener() {
+                    @Override
+                    public void onInfoWindowClick() {
+                        mBaiduMap.hideInfoWindow();
+                        stopAnimation();
+                    }
+                });
+                mBaiduMap.showInfoWindow(infoWindow);
+            }
+
+        }).start();
         startAnimation();
         return true;
     }
@@ -636,7 +648,39 @@ public class MapActivity extends AppCompatActivity implements BaiduMap.OnMarkerC
     }
 
     @Override
-    public void onMapClick(LatLng latLng) {
+    public void onMapClick(LatLng latLng) {   //地图点击事件(获取当前地址)
+        //获取经纬度
+        double latitude = latLng.latitude;
+        double longitude = latLng.longitude;
+        System.out.println("latitude = " + latitude + ",longitude = " + longitude);
+
+        //定义Maker坐标点
+        LatLng point = new LatLng(latitude, longitude);
+
+        //实例化一个地理编码查询对象
+        GeoCoder geoCoder = GeoCoder.newInstance();
+        //设置反地理编码位置坐标
+        ReverseGeoCodeOption op = new ReverseGeoCodeOption();
+        op.location(latLng);
+        //发起反地理编码请求(经纬度->地址信息)
+        geoCoder.reverseGeoCode(op);
+        geoCoder.setOnGetGeoCodeResultListener(new OnGetGeoCoderResultListener() {
+
+            @Override
+            public void onGetReverseGeoCodeResult(ReverseGeoCodeResult arg0) {
+                //获取点击的坐标地址
+                address = arg0.getAddressDetail().province
+                        + arg0.getAddressDetail().city
+                        + arg0.getAddressDetail().district
+                        + arg0.getAddressDetail().street
+                        + arg0.getAddressDetail().streetNumber;
+                System.out.println("address = " + address);
+            }
+
+            @Override
+            public void onGetGeoCodeResult(GeoCodeResult arg0) {
+            }
+        });
         mBaiduMap.hideInfoWindow();
         stopAnimation();
     }
@@ -776,6 +820,7 @@ public class MapActivity extends AppCompatActivity implements BaiduMap.OnMarkerC
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        // TODO Auto-generated method stub
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == authBaseRequestCode) {
             for (int ret : grantResults) {

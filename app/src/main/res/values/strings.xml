@@ -7,7 +7,7 @@
     <string name="password">密码</string>
     <string name="register">注册</string>
     <string name="forget_password">忘记密码 ？</string>
-    <string name="finish_app">确定退出么？</string>
+    <string name="finish_app">确定注销么？</string>
     <string name="get_identifying_code">获取验证码</string>
     <string name="phone_number">手机号</string>
 
@@ -23,6 +23,7 @@
     <string name="order_history">历史订单</string>
     <string name="news_cneter">消息中心</string>
     <string name="setting">设置</string>
+    <string name="finish_user_message">注销</string>
 
     <!--车位信息-->
     <string name="main_interface">智能车位</string>
@@ -51,5 +52,6 @@
     <string name="down">下降</string>
     <string name="not_connected">蓝牙未连接</string>
     <string name="reconnect">重新连接</string>
+    <string name="refreshConnect">重新连接</string>
 
 </resources>

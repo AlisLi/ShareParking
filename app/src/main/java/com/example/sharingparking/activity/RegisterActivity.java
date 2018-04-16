@@ -29,8 +29,6 @@ import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
-import java.util.List;
-
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 import okhttp3.Call;
@@ -38,8 +36,8 @@ import okhttp3.MediaType;
 
 import static com.example.sharingparking.common.Common.NET_URL_HEADER;
 import static com.example.sharingparking.common.Common.REGISTER_USER_ERROR;
-import static com.example.sharingparking.common.Common.REGISTER_USER_EXIST;
 import static com.example.sharingparking.common.Common.REGISTER_USER_FAIL;
+import static com.example.sharingparking.utils.Utility.handleMessageResponse;
 
 
 /**
@@ -90,7 +88,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 case SMSSDK_TEST_RESPONSE:
                     int event = msg.arg1;
                     int result = msg.arg2;
-                    Object data = msg.obj;
 
                     //如果发送成功
                     if(result == SMSSDK.RESULT_COMPLETE){
@@ -114,21 +111,20 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
                                         @Override
                                         public void onResponse(String response, int id) {
-                                            List<User> list = Utility.handleUserResponse(response);
-                                            if(list != null && !REGISTER_USER_EXIST.equals(response)){
+                                            User user = Utility.handleUserResponse(response);
+                                            if(user != null){
                                                 //如果服务器验证成功，跳转到主界面
                                                 Toast.makeText(RegisterActivity.this,"注册成功",
                                                         Toast.LENGTH_SHORT).show();
                                                 Intent intent = new Intent(RegisterActivity.this,MainActivity.class);
-                                                User user = list.get(0);
-                                                //传入用户名
+                                                //传入用户名,id
                                                 intent.putExtra("userName",user.getUserName());
                                                 intent.putExtra("userId",user.getUserId());
                                                 startActivity(intent);
                                                 finish();
-                                            }else if(REGISTER_USER_EXIST.equals(response)){
-                                                //提示已经注册
-                                                Toast.makeText(RegisterActivity.this,"注册失败，该手机号已经注册",
+                                            }else if(handleMessageResponse(response) != null){
+                                                //提示错误信息
+                                                Toast.makeText(RegisterActivity.this,handleMessageResponse(response),
                                                         Toast.LENGTH_SHORT).show();
                                             }else{
                                                 Toast.makeText(RegisterActivity.this,REGISTER_USER_FAIL,

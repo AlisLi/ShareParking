@@ -26,20 +26,16 @@ public class Utility {
      * @param response
      * @return
      */
-    public static List<User> handleUserResponse(String response){
+    public static User handleUserResponse(String response){
         if(!TextUtils.isEmpty(response)){
             try {
                 Log.d(UTILITY_TAG,"user : " + response);
-                List<User> list = new ArrayList<>();
-                JSONArray users = new JSONArray(response);
-                for(int i = 0;i < users.length();i++){
-                    JSONObject userObject = users.getJSONObject(i);
-                    User user = getUserJson(userObject);
-                    list.add(user);
-                }
-                return list;
+                JSONObject userObject = new JSONObject(response);
+                User user = getUserJson(userObject);
+                return user;
             } catch (JSONException e) {
                 e.printStackTrace();
+                return null;
             }
         }
         return null;
@@ -94,6 +90,21 @@ public class Utility {
         return null;
     }
 
+    public static String handleMessageResponse(String response){
+        if(!TextUtils.isEmpty(response)){
+            try {
+                Log.d(UTILITY_TAG,"error : " + response);
+                JSONObject userObject = new JSONObject(response);
+                String message = userObject.getString("msg");
+                return message;
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+        return null;
+    }
+
 
 
     /**
@@ -113,8 +124,8 @@ public class Utility {
             return user;
         } catch (JSONException e) {
             e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
     /**

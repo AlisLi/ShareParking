@@ -9,7 +9,7 @@ public class ParkingLock {
     private int lockId;     //锁编号
     private User user;     //用户
     private BlueTooth blueTooth;    //蓝牙
-    private String address;     //车位位置
+    private LockAddress lockAddress;     //车位位置
     private int lockState;  //锁的状态
     private int infrared;   //红外线状态
     private int led;        //LED灯状态
@@ -55,12 +55,12 @@ public class ParkingLock {
         this.battery = battery;
     }
 
-    public String getAddress() {
-        return address;
+    public LockAddress getLockAddress() {
+        return lockAddress;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setLockAddress(LockAddress lockAddress) {
+        this.lockAddress = lockAddress;
     }
 
     public User getUser() {

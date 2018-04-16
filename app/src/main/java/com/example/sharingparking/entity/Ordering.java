@@ -7,7 +7,7 @@ package com.example.sharingparking.entity;
 
 public class Ordering {
     private int OrderingId; //订单ID
-    private Publish publish;    //发布信息
+    private ParkingLock lock;    //发布信息
     private User user;  //租用者
     private String startTime;  //订单下单时间
     private String endTime;     //截止时间
@@ -54,12 +54,12 @@ public class Ordering {
         this.expense = expense;
     }
 
-    public Publish getPublish() {
-        return publish;
+    public ParkingLock getLock() {
+        return lock;
     }
 
-    public void setPublish(Publish publish) {
-        this.publish = publish;
+    public void setLock(ParkingLock lock) {
+        this.lock = lock;
     }
 
     public int getOrderingId() {

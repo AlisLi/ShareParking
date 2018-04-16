@@ -54,7 +54,7 @@
         app:srcCompat="@mipmap/ic_mn" />
 
     <!--手动添加车位按钮-->
-    <android.support.design.widget.FloatingActionButton
+<!--    <android.support.design.widget.FloatingActionButton
         android:id="@+id/registerCarParking"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -66,6 +66,6 @@
         app:layout_anchorGravity="bottom|end"
         android:onClick="registerCarParking"
         android:text="注册车位"
-        app:srcCompat="@mipmap/registercarparking"/>
+        app:srcCompat="@mipmap/registercarparking"/>-->
 
 </RelativeLayout>

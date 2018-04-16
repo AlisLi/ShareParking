@@ -1,36 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <!--先获取焦点-->
+    <LinearLayout
+        android:layout_width="0px"
+        android:layout_height="0px"
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
+
     <TextView
-        android:id="@+id/facilityID"
-        android:layout_width="wrap_content"
+        android:id="@+id/text_facilityId"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="6dp"
+        android:layout_gravity="left"
+        android:text="设备编号："
         android:textSize="20dp"
-        android:text="设备ID:"/>
+        android:textStyle="bold"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="12dp"/>
 
     <EditText
         android:id="@+id/et_facilityID"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="12dp"
         android:hint="请输入设备编号"/>
 
     <TextView
-        android:id="@+id/carParing_address"
+        android:id="@+id/text_carParking_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="6dp"
+        android:layout_gravity="left"
+        android:text="地址："
+        android:textStyle="bold"
         android:textSize="20dp"
-        android:text="地址:"/>
+        android:layout_marginLeft="10dp"/>
 
-    <EditText
-        android:id="@+id/et_carParking_address"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="请输入地址"/>
+        android:gravity="center">
+
+        <EditText
+            android:id="@+id/et_carParking_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginLeft="32dp"
+            android:hint="请输入地址"/>
+            <!--app:clearButtonMode="whileEditing"
+            app:clearButtonDrawable="@drawable/clear_button"-->
+
+
+        <ImageButton
+            android:id="@+id/btn_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/et_carParking_address"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/location"
+            android:onClick="locateCurrentAddr"/>
+
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/text_carParking_detail_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:text="详细地址："
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:layout_marginLeft="10dp"/>
+
+
+    <EditText
+        android:id="@+id/et_carParking_detail_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="12dp"
+        android:hint="请输入详细地址"/>
+
+
+
+    <Button
+        android:id="@+id/save_carParking"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_gravity="center"
+        android:text="保存"
+        android:onClick="toCarParkingRecyclerView"/>
 
 </LinearLayout>

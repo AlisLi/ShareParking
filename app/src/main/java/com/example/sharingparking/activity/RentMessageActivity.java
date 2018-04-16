@@ -12,9 +12,8 @@ import android.view.View;
 import com.example.sharingparking.R;
 import com.example.sharingparking.SysApplication;
 import com.example.sharingparking.adapter.RentMessageAdapter;
-import com.example.sharingparking.entity.ParkingLock;
 import com.example.sharingparking.entity.Ordering;
-import com.example.sharingparking.entity.Publish;
+import com.example.sharingparking.entity.ParkingLock;
 import com.example.sharingparking.entity.User;
 
 import java.util.ArrayList;
@@ -111,19 +110,15 @@ public class RentMessageActivity extends AppCompatActivity {
         Ordering ordering = new Ordering();
         User user = new User();
         ParkingLock parkingLock = new ParkingLock();
-        Publish publish = new Publish();
 
         user.setPhoneNumber("13672245698");
         user.setUserName("李先生");
         parkingLock.setAddress("南昌航空大学");
         ordering.setEndTime("1");
         ordering.setStartTime("2");
-        publish.setParkingLock(parkingLock);
-        parkingLock.setUser(user);
-        publish.setParkingMoney(10);
         ordering.setExpense(100);
         ordering.setUser(user);
-        ordering.setPublish(publish);
+        ordering.setLock(parkingLock);
         ordering.setUser(user);
 
         mOrderingList.add(ordering);

@@ -66,8 +66,8 @@ public class RentMessageAdapter extends RecyclerView.Adapter<RentMessageAdapter.
         Ordering ordering = mOrderingList.get(position);
         holder.txtParkingOwner.setText(ordering.getUser().getUserName());
         holder.txtParkingOwnerPhone.setText(ordering.getUser().getPhoneNumber());
-        holder.txtParkingAddress.setText(ordering.getPublish().getParkingLock().getAddress());
-        holder.txtParkingPrice.setText(ordering.getPublish().getParkingMoney() + "");
+        holder.txtParkingAddress.setText(ordering.getLock().getAddress());
+        holder.txtParkingPrice.setText("");
         holder.txtParkingExpense.setText(ordering.getExpense() + "");
         holder.txtRentTime.setText(CommonUtil.caculateRentTime(ordering.getEndTime(),ordering.getStartTime()));
 

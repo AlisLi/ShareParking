@@ -15,4 +15,12 @@
             android:layout_gravity="center"
             android:id="@+id/textView"/>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:onClick="finishUserMessage"
+        android:text="@string/finish_user_message"
+        android:textSize="18sp"/>
+
 </FrameLayout>

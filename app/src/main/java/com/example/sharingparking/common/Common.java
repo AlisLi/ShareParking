@@ -7,7 +7,7 @@ package com.example.sharingparking.common;
 public class Common {
 
     //访问服务器的url前置部分
-    public static final String NET_URL_HEADER = "https://superrocket.cn/sharepark/";
+   public static final String NET_URL_HEADER = "http://192.168.1.107:8080/sharepark/";
 
     public static final String TAG_SHOW = "lzg";
 
@@ -32,6 +32,14 @@ public class Common {
      * 车位锁
      */
     public static final String LOCK_REQUEST_ERROR = "车位锁获取数据异常";
+    public static final String LOCK_UP = "1#";  //控制车位上升
+    public static final String LOCK_DOWN = "0#";  //控制车位下降
+    public static final String LOCK_DOWN_STATE = "1";  //车位锁处于0度
+    public static final String LOCK_BAR_STATE = "2";  //车位锁处于0度-90度,且有障碍物
+    public static final String LOCK_DOWNING_STATE = "3";  //车位锁处于下降状态
+    public static final String LOCK_UPPING_STATE = "3";  //车位锁处于上升状态
+    public static final String LOCK_UP_STATE = "4";  //车位锁处于90度
+    public static final String LOCK_OVER_UP_STATE = "5";  //车位锁处于90度-180度
 
 
 
