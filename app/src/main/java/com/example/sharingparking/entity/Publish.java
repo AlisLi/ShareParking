@@ -9,7 +9,7 @@ public class Publish {
     private int publishId;          //发布编号
     private String publishStartTime;   //发布开始时间
     private String publishEndTime;  //发布截止时间
-    private ParkingLock mParkingLock;   //锁
+    private int lockId;   //锁
     private double ParkingMoney;   //车位金额
     private int publishState;   //发布状态
 
@@ -37,12 +37,12 @@ public class Publish {
         this.publishEndTime = publishEndTime;
     }
 
-    public ParkingLock getParkingLock() {
-        return mParkingLock;
+    public int getLockId() {
+        return lockId;
     }
 
-    public void setParkingLock(ParkingLock parkingLock) {
-        this.mParkingLock = parkingLock;
+    public void setLockId(int lockId) {
+        this.lockId = lockId;
     }
 
     public double getParkingMoney() {

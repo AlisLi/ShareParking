@@ -1,5 +1,6 @@
 package com.example.sharingparking.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -21,15 +22,30 @@ import com.example.sharingparking.R;
 import com.example.sharingparking.SysApplication;
 import com.example.sharingparking.adapter.LockAdapter;
 import com.example.sharingparking.entity.ParkingLock;
+import com.google.gson.Gson;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.MediaType;
+
+import static com.example.sharingparking.common.Common.LOCK_REGISTER_ERROR;
+import static com.example.sharingparking.common.Common.LOCK_REGISTER_FAIL;
+import static com.example.sharingparking.common.Common.NET_URL_HEADER;
+import static com.example.sharingparking.utils.CommonUtil.linkParkingAddress;
+import static com.example.sharingparking.utils.CommonUtil.toast;
+import static com.example.sharingparking.utils.Utility.handleLockResponse;
+import static com.example.sharingparking.utils.Utility.handleMessageResponse;
 
 /**
  * 注册车位
  */
 
 public class RegisterParkingActivity extends AppCompatActivity {
+    private String TAG = "RegisterParkingActivity";
 
     private static final int BAIDU_READ_PHONE_STATE =100;
 
@@ -52,6 +68,9 @@ public class RegisterParkingActivity extends AppCompatActivity {
 
     private List<ParkingLock> mParkingLockList = new ArrayList<>();
     private int userId;     //用户ID
+    private int facilityId;//车位id
+    private String facilityAddr;//车位地址
+    private String facilityDetailAddr;//车位详细地址
 
     private LockAdapter mLockAdapter;
 
@@ -77,18 +96,16 @@ public class RegisterParkingActivity extends AppCompatActivity {
         setContentView(R.layout.dialog);
         startLocate();
 
-       /* txt_lock_no = (TextView) findViewById(R.id.txt_lock_no);
 
-        txt_lock_address = (TextView) findViewById(R.id.txt_lock_address);
+        init();
 
-        txt_lock_state = (TextView) findViewById(R.id.txt_lock_state);
 
-        txt_lock_no.setOnFocusChangeListener(new FacilityIDOnFocusChangeListener());
+        //添加活动到ActivityList中(安全退出)
+        SysApplication.getInstance().addActivity(this);
+    }
 
-        txt_lock_address.setOnFocusChangeListener(new AddressOnFocusChangeListener());
-
-        btn_publish = (Button) findViewById(R.id.btn_publish);*/
-
+    private void init() {
+        userId = getIntent().getIntExtra("userId",0);
 
         text_facilityId = (TextView) findViewById(R.id.text_facilityId);
 
@@ -102,18 +119,7 @@ public class RegisterParkingActivity extends AppCompatActivity {
 
         et_carParking_detail_address = (EditText) findViewById(R.id.et_carParking_detail_address);
 
-        //et_facilityID.setOnFocusChangeListener(new FacilityIDOnFocusChangeListener());
-
-        //et_carParking_address.setOnFocusChangeListener(new AddressOnFocusChangeListener());
-
         btn_saveCarParking = (Button) findViewById(R.id.save_carParking);
-
-
-        //mAdapter = new ArrayAdapter<CarParkingInfo>(getApplicationContext(), android.R.layout.simple_list_item_1);
-        // mRecyclerView.setAdapter(mLockAdapter);
-
-        //添加活动到ActivityList中(安全退出)
-        SysApplication.getInstance().addActivity(this);
     }
 
     /**
@@ -242,13 +248,58 @@ public class RegisterParkingActivity extends AppCompatActivity {
      */
     public void toCarParkingRecyclerView(View view) {
 
-        String facilityId = et_facilityID.getText().toString().trim();
-        String facilityAddr = et_carParking_address.getText().toString().trim();
-        String facilityDrtailAddr = et_carParking_detail_address.getText().toString().trim();
+        facilityId = Integer.parseInt(et_facilityID.getText().toString().trim());
+        facilityAddr = et_carParking_address.getText().toString().trim();
+        facilityDetailAddr = et_carParking_detail_address.getText().toString().trim();
+
+        /**
+         * 注册车位，发起http请求
+         */
+        registerParking();
 
 
 
+    }
 
+    /**
+     *注册车位请求
+     */
+    private void registerParking() {
+        OkHttpUtils
+                .postString()
+                .url(NET_URL_HEADER + "user/bindlock")
+                .mediaType(MediaType.parse("application/json; charset=utf-8"))
+                .content(new Gson().toJson(new ParkingLock(this.facilityId,this.userId,
+                        linkParkingAddress(this.facilityAddr,this.facilityDetailAddr))))
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        toast(RegisterParkingActivity.this,LOCK_REGISTER_ERROR);
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        Log.d(TAG,response);
+                        List<ParkingLock> parkingLocks = handleLockResponse(response);
+                        if(parkingLocks != null){
+                            //车位注册成功,返回我的车位界面
+                            Intent intent = new Intent(RegisterParkingActivity.this,ParkingActivity.class);
+                            startActivity(intent);
+
+                        }else if(handleMessageResponse(response) != null){
+                            //提示错误信息
+                            Toast.makeText(RegisterParkingActivity.this,handleMessageResponse(response),
+                                    Toast.LENGTH_SHORT).show();
+                        }else{
+                            //车位注册失败
+                            Toast.makeText(RegisterParkingActivity.this,LOCK_REGISTER_FAIL,
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+
+                    }
+                });
     }
 
     //保存车位信息(SharedPreferences)

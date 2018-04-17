@@ -1,6 +1,7 @@
 package com.example.sharingparking.utils;
 
 import android.content.Context;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -23,4 +24,34 @@ public class CommonUtil {
     public static String caculateRentTime(String endTime,String startTime){
         return 10 + "";
     }
+
+    /**
+     * 将车位地址链接
+     * 下划线分割
+     */
+    public static String linkParkingAddress(String locationAddress,String detailAddress){
+
+        String address = locationAddress + "_" + detailAddress;
+
+        return address;
+    }
+
+
+    /**
+     * 将车位地址拆分
+     */
+    public static String[] splitParkingAddress(String address){
+
+        String[] addresses = address.split("_");
+
+        return addresses;
+    }
+
+    /**
+     * 初始化title
+     */
+    public  static void initTitle(TextView txtTitle,String titleText){
+        txtTitle.setText(titleText);//设置标题
+    }
+
 }

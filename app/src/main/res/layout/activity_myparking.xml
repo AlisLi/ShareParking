@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:background="#ebebeb">
 
-    <include layout="@layout/title_myparking"></include>
+    <include layout="@layout/title_common"></include>
 
     <FrameLayout
         android:layout_width="match_parent"

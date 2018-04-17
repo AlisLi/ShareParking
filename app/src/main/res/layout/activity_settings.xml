@@ -6,7 +6,7 @@
               android:layout_height="match_parent"
               android:background="#ebebeb">
 
-    <include layout="@layout/title_setting"></include>
+    <include layout="@layout/title_common"></include>
 
     <TextView
             android:layout_width="wrap_content"

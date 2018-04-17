@@ -113,7 +113,6 @@ public class RentMessageActivity extends AppCompatActivity {
 
         user.setPhoneNumber("13672245698");
         user.setUserName("李先生");
-        parkingLock.setAddress("南昌航空大学");
         ordering.setEndTime("1");
         ordering.setStartTime("2");
         ordering.setExpense(100);

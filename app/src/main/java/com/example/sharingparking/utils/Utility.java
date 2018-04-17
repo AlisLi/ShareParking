@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.example.sharingparking.entity.BlueTooth;
 import com.example.sharingparking.entity.ParkingLock;
+import com.example.sharingparking.entity.Publish;
 import com.example.sharingparking.entity.User;
 
 import org.json.JSONArray;
@@ -41,72 +42,6 @@ public class Utility {
         return null;
     }
 
-    public static List<BlueTooth> handleBlueToothResponse(String response){
-        if(!TextUtils.isEmpty(response)){
-            try {
-                List<BlueTooth> list = new ArrayList<>();
-                JSONArray blueTooths = new JSONArray(response);
-                for(int i = 0;i < blueTooths.length();i++){
-                    JSONObject bluetoothObject = blueTooths.getJSONObject(i);
-                    BlueTooth blueTooth = getBlueToothJson(bluetoothObject);
-                    list.add(blueTooth);
-                }
-                return list;
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-    /**
-     * 解析和处理用户Json数据
-     * @param response
-     * @return
-     */
-    public static List<ParkingLock> handleLockResponse(String response){
-        if(!TextUtils.isEmpty(response)){
-            try {
-                List<ParkingLock> list = new ArrayList<>();
-                JSONArray locks = new JSONArray(response);
-                for(int i = 0;i < locks.length();i++){
-                    JSONObject locksJSONObject = locks.getJSONObject(i);
-                    ParkingLock parkingLock = new ParkingLock();
-                    User user = getUserJson(locksJSONObject);
-                    parkingLock.setLockId(locksJSONObject.getInt("lockId"));
-                    parkingLock.setAddress(locksJSONObject.getString("address"));
-                    parkingLock.setBattery(locksJSONObject.getInt("battery"));
-                    parkingLock.setInfrared(locksJSONObject.getInt("infrared"));
-                    parkingLock.setLed(locksJSONObject.getInt("led"));
-                    parkingLock.setLockState(locksJSONObject.getInt("lockState"));
-                    parkingLock.setUser(user);
-                    list.add(parkingLock);
-                }
-                return list;
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-    public static String handleMessageResponse(String response){
-        if(!TextUtils.isEmpty(response)){
-            try {
-                Log.d(UTILITY_TAG,"error : " + response);
-                JSONObject userObject = new JSONObject(response);
-                String message = userObject.getString("msg");
-                return message;
-            } catch (JSONException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-        return null;
-    }
-
-
-
     /**
      * 获取用户Json数据
      * @param jsonObject
@@ -127,6 +62,141 @@ public class Utility {
             return null;
         }
     }
+
+    public static List<BlueTooth> handleBlueToothResponse(String response){
+        if(!TextUtils.isEmpty(response)){
+            try {
+                List<BlueTooth> list = new ArrayList<>();
+                JSONArray blueTooths = new JSONArray(response);
+                for(int i = 0;i < blueTooths.length();i++){
+                    JSONObject bluetoothObject = blueTooths.getJSONObject(i);
+                    BlueTooth blueTooth = getBlueToothJson(bluetoothObject);
+                    list.add(blueTooth);
+                }
+                return list;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 解析和处理车位锁Json数据
+     * @param response
+     * @return
+     */
+    public static List<ParkingLock> handleLockResponse(String response){
+        if(!TextUtils.isEmpty(response)){
+            try {
+                List<ParkingLock> list = new ArrayList<>();
+                JSONArray jsonArray = new JSONArray(response);
+                for(int i = 0;i < jsonArray.length();i++){
+                    JSONObject locksJSONObject = jsonArray.getJSONObject(i);
+                    ParkingLock parkingLock = getParkingLockJson(locksJSONObject);
+                    list.add(parkingLock);
+                }
+                return list;
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 获取车位锁json数据
+     * @param jsonObject
+     * @return
+     */
+    private static ParkingLock getParkingLockJson(JSONObject jsonObject){
+
+        try {
+            ParkingLock parkingLock = new ParkingLock();
+
+            parkingLock.setLockId(jsonObject.getInt("lockId"));
+            parkingLock.setUserId(jsonObject.getInt("userId"));
+            parkingLock.setBlueToothId(jsonObject.getInt("blueToothId"));
+            parkingLock.setAddress(jsonObject.getString("address"));
+            parkingLock.setBattery(jsonObject.getInt("battery"));
+            parkingLock.setInfrared(jsonObject.getInt("infrared"));
+            parkingLock.setLed(jsonObject.getInt("led"));
+            parkingLock.setLockState(jsonObject.getInt("lockState"));
+
+            return parkingLock;
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static List<Publish> handlePublishResponse(String response){
+        if(!TextUtils.isEmpty(response)){
+            try {
+                List<Publish> list = new ArrayList<>();
+                JSONArray jsonArray = new JSONArray(response);
+                for(int i = 0;i < jsonArray.length();i++){
+                    JSONObject publishJSONObject = jsonArray.getJSONObject(i);
+                    Publish publish = getPublishJson(publishJSONObject);
+                    list.add(publish);
+                }
+                return list;
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 获取车位锁发布json数据
+     * @param publishJSONObject
+     * @return
+     */
+    private static Publish getPublishJson(JSONObject publishJSONObject) {
+        try {
+            Publish publish = new Publish();
+
+            publish.setPublishId(publishJSONObject.getInt("publishId"));
+            publish.setLockId(publishJSONObject.getInt("lockId"));
+            publish.setPublishStartTime(publishJSONObject.getString("startTime"));
+            publish.setPublishEndTime(publishJSONObject.getString("endTime"));
+            publish.setParkingMoney(publishJSONObject.getDouble("parkingMoney"));
+            publish.setPublishState(publishJSONObject.getInt("publishState"));
+
+            return publish;
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 处理和解析异常Json提示信息
+     * @param response
+     * @return
+     */
+    public static String handleMessageResponse(String response){
+        if(!TextUtils.isEmpty(response)){
+            try {
+                Log.d(UTILITY_TAG,"error : " + response);
+                JSONObject userObject = new JSONObject(response);
+                String message = userObject.getString("msg");
+                return message;
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+        return null;
+    }
+
 
     /**
      * 获取蓝牙json数据
@@ -149,32 +219,6 @@ public class Utility {
         return null;
     }
 
-    /**
-     * 获取车位锁json数据
-     * @param jsonObject
-     * @return
-     */
-    private static ParkingLock getParkingLockJson(JSONObject jsonObject){
 
-        try {
-            ParkingLock parkingLock = new ParkingLock();
-            User user = getUserJson(jsonObject);
-            BlueTooth blueTooth = getBlueToothJson(jsonObject);
-            parkingLock.setLockId(jsonObject.getInt("lockId"));
-            parkingLock.setAddress(jsonObject.getString("address"));
-            parkingLock.setBattery(jsonObject.getInt("battery"));
-            parkingLock.setInfrared(jsonObject.getInt("infrared"));
-            parkingLock.setLed(jsonObject.getInt("led"));
-            parkingLock.setLockState(jsonObject.getInt("lockState"));
-            parkingLock.setUser(user);
-            parkingLock.setBlueTooth(blueTooth);
-
-            return parkingLock;
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 
 }

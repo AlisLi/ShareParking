@@ -14,6 +14,8 @@ import com.example.sharingparking.entity.ParkingLock;
 
 import java.util.List;
 
+import static com.example.sharingparking.utils.CommonUtil.splitParkingAddress;
+
 /**
  * 车位信息适配器
  * Created by Lizhiguo on 2018/3/15.
@@ -29,7 +31,7 @@ public class LockAdapter extends RecyclerView.Adapter<LockAdapter.ViewHolder>{
         CardView cardView;
         TextView txtLockNo;
         TextView txtLockAddress;
-        TextView txtLockState;
+        TextView txtLockDetailAddress;
         Button btnPublish;
 
         public ViewHolder(View view){
@@ -37,7 +39,7 @@ public class LockAdapter extends RecyclerView.Adapter<LockAdapter.ViewHolder>{
             cardView = (CardView) view;
             txtLockNo = (TextView) view.findViewById(R.id.txt_lock_no);
             txtLockAddress = (TextView) view.findViewById(R.id.txt_lock_address);
-            txtLockState = (TextView) view.findViewById(R.id.txt_lock_state);
+            txtLockDetailAddress = (TextView) view.findViewById(R.id.txt_parking_detail_address);
             btnPublish = (Button) view.findViewById(R.id.btn_publish);
 
         }
@@ -62,8 +64,13 @@ public class LockAdapter extends RecyclerView.Adapter<LockAdapter.ViewHolder>{
     public void onBindViewHolder(ViewHolder holder, int position) {
         ParkingLock parking = mParkingLockList.get(position);
         holder.txtLockNo.setText(parking.getLockId());
-        holder.txtLockAddress.setText(parking.getAddress());
-        holder.txtLockState.setText(parking.getLockState());
+
+        /**
+         * 将车位地址拆分为定位地址和详细地址
+         */
+        String[] addresses = splitParkingAddress(parking.getAddress());
+        holder.txtLockAddress.setText(addresses[0]);
+        holder.txtLockDetailAddress.setText(addresses[1]);
         /**
          * 判断发布状态
          * 若为：未发布，则隐藏租用等信息

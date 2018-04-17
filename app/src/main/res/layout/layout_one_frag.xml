@@ -64,9 +64,9 @@
                 android:gravity="center"
                 android:textColor="@color/white"
                 android:background="@drawable/bg_mian_click"
-                android:text="@string/my_parking"
+                android:text="@string/publish_parking_message"
                 android:textSize="20sp"
-                android:onClick="toMyParking"/>
+                android:onClick="toPublishParking"/>
 
         </LinearLayout>
 

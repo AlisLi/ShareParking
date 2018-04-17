@@ -9,9 +9,12 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.sharingparking.R;
 import com.example.sharingparking.SysApplication;
+
+import static com.example.sharingparking.utils.CommonUtil.initTitle;
 
 /**
  * Created by Lizhiguo on 2017/11/29.
@@ -20,6 +23,8 @@ import com.example.sharingparking.SysApplication;
 public class SettingActivity extends AppCompatActivity {
 
     private SharedPreferences mSharedPreferences;
+
+    private TextView txtTitle;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,6 +35,15 @@ public class SettingActivity extends AppCompatActivity {
 
         //添加活动到ActivityList中(安全退出)
         SysApplication.getInstance().addActivity(this);
+
+        init();
+    }
+
+    private void init() {
+
+        txtTitle = (TextView) findViewById(R.id.txt_title_common);
+        initTitle(txtTitle,getIntent().getStringExtra("title_text"));
+
     }
 
     //注销用户

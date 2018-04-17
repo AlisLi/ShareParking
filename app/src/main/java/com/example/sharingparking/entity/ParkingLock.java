@@ -7,13 +7,22 @@ package com.example.sharingparking.entity;
 
 public class ParkingLock {
     private int lockId;     //锁编号
-    private User user;     //用户
-    private BlueTooth blueTooth;    //蓝牙
-    private LockAddress lockAddress;     //车位位置
+    private int userId;     //用户ID
+    private int blueToothId;    //蓝牙ID
+    private String address;     //车位位置
     private int lockState;  //锁的状态
     private int infrared;   //红外线状态
     private int led;        //LED灯状态
     private int battery;    //电池状态
+
+    public ParkingLock() {
+    }
+
+    public ParkingLock(int lockId, int userId, String address) {
+        this.lockId = lockId;
+        this.userId = userId;
+        this.address = address;
+    }
 
     public int getLockId() {
         return lockId;
@@ -55,27 +64,27 @@ public class ParkingLock {
         this.battery = battery;
     }
 
-    public LockAddress getLockAddress() {
-        return lockAddress;
+    public String getAddress() {
+        return address;
     }
 
-    public void setLockAddress(LockAddress lockAddress) {
-        this.lockAddress = lockAddress;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public User getUser() {
-        return user;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
-    public BlueTooth getBlueTooth() {
-        return blueTooth;
+    public int getBlueToothId() {
+        return blueToothId;
     }
 
-    public void setBlueTooth(BlueTooth blueTooth) {
-        this.blueTooth = blueTooth;
+    public void setBlueToothId(int blueToothId) {
+        this.blueToothId = blueToothId;
     }
 }

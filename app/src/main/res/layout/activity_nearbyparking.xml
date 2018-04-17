@@ -5,7 +5,7 @@
              android:layout_height="match_parent"
               android:background="#ebebeb">
 
-    <include layout="@layout/title_nearbyparking"></include>
+    <include layout="@layout/title_common"></include>
 
     <ListView
         android:id="@+id/nearbyparking_list"

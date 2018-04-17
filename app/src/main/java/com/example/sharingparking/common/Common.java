@@ -29,9 +29,8 @@ public class Common {
     public static final String REGISTER_USER_FAIL = "注册失败";
 
     /**
-     * 车位锁
+     * 车位锁控制
      */
-    public static final String LOCK_REQUEST_ERROR = "车位锁获取数据异常";
     public static final String LOCK_UP = "1#";  //控制车位上升
     public static final String LOCK_DOWN = "0#";  //控制车位下降
     public static final String LOCK_DOWN_STATE = "1";  //车位锁处于0度
@@ -40,6 +39,24 @@ public class Common {
     public static final String LOCK_UPPING_STATE = "3";  //车位锁处于上升状态
     public static final String LOCK_UP_STATE = "4";  //车位锁处于90度
     public static final String LOCK_OVER_UP_STATE = "5";  //车位锁处于90度-180度
+
+    /**
+     * 车位锁注册
+     */
+    public  static final String LOCK_REGISTER_ERROR = "车位锁注册异常";
+    public  static final String LOCK_REGISTER_FAIL = "车位锁注册失败";
+
+    /**
+     * 车位锁显示
+     */
+    public static final String LOCK_REQUEST_ERROR = "车位锁信息获取异常";
+    public static final String LOCK_REQUEST_FAIL = "车位锁信息获取失败";
+
+    /**
+     * 车位发布信息
+     */
+    public static final String LOCK_PUBLISH_ERROR = "车位锁发布信息异常";
+    public static final String LOCK_PUBLISH_FAIL = "车位锁发布信息失败";
 
 
 
