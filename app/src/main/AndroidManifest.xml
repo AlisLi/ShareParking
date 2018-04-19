@@ -60,13 +60,13 @@
         </service>
 
         <activity android:name=".activity.LoginActivity">
-
-        </activity>
-        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity android:name=".activity.MainActivity">
+
         </activity>
         <activity
             android:name=".activity.RegisterActivity"
@@ -84,11 +84,17 @@
         </activity>
         <activity android:name=".activity.BenefitActivity">
         </activity>
-        <activity android:name=".activity.RegisterParkingActivity">
+        <activity android:name=".activity.RegisterParkingByUserActivity">
         </activity>
         <activity android:name=".activity.RentMessageActivity">
         </activity>
         <activity android:name=".activity.ControlParkingActivity">
+        </activity>
+        <activity android:name=".activity.PublishActivity">
+        </activity>
+        <activity android:name=".activity.PublishedActivity">
+        </activity>
+        <activity android:name=".activity.ControlParkingByNetActivity">
         </activity>
         <!--拦截配对框，实行自动配对
         <receiver android:name=".utils.BluetoothReceiver" >

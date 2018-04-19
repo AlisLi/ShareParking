@@ -12,6 +12,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,6 +84,28 @@ public class Utility {
     }
 
     /**
+     * 解析注册锁的信息
+     * @param response
+     * @return
+     */
+    public static ParkingLock handleRegisterLockResponse(String response){
+        if(!TextUtils.isEmpty(response)){
+            try {
+
+                JSONObject locksJSONObject = new JSONObject(response);
+                ParkingLock parkingLock = getParkingLockJson(locksJSONObject);
+
+                return parkingLock;
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+        return null;
+    }
+
+    /**
      * 解析和处理车位锁Json数据
      * @param response
      * @return
@@ -119,7 +143,8 @@ public class Utility {
             parkingLock.setLockId(jsonObject.getInt("lockId"));
             parkingLock.setUserId(jsonObject.getInt("userId"));
             parkingLock.setBlueToothId(jsonObject.getInt("blueToothId"));
-            parkingLock.setAddress(jsonObject.getString("address"));
+            parkingLock.setAddress(URLDecoder.decode(jsonObject.getString("address"), "UTF-8"));
+            Log.d(UTILITY_TAG,URLDecoder.decode(jsonObject.getString("address"),"UTF-8"));
             parkingLock.setBattery(jsonObject.getInt("battery"));
             parkingLock.setInfrared(jsonObject.getInt("infrared"));
             parkingLock.setLed(jsonObject.getInt("led"));
@@ -128,6 +153,8 @@ public class Utility {
             return parkingLock;
 
         } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         return null;

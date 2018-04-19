@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity{
     //跳转到我的车位
     public void showParking(View view){
         Intent intent = new Intent(this,ParkingActivity.class);
-        intent.putExtra("title_text",R.string.my_parking);
+        intent.putExtra("title_text",getResources().getText(R.string.my_parking));
         intent.putExtra("userId",userId);
         startActivity(sendUserId(intent));
     }
@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity{
 
     //从主界面跳转到发布详情
     public void toPublishParking(View view){
-        Intent intent = new Intent(this,PublishActivity.class);
+        Intent intent = new Intent(this,PublishedActivity.class);
         intent.putExtra("title_text",R.string.publish_parking_message);
         intent.putExtra("userId",userId);
         startActivity(intent);

@@ -81,6 +81,13 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/btn_control_my_parking"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/control"
+                android:textSize="14sp"/>
+
+            <Button
                 android:id="@+id/btn_publish"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -25,7 +25,7 @@ import java.util.List;
 import okhttp3.Call;
 import okhttp3.MediaType;
 
-import static com.example.sharingparking.common.Common.LOCK_REGISTER_ERROR;
+import static com.example.sharingparking.common.Common.LOCK_REQUEST_ERROR;
 import static com.example.sharingparking.common.Common.LOCK_REQUEST_FAIL;
 import static com.example.sharingparking.common.Common.NET_URL_HEADER;
 import static com.example.sharingparking.utils.CommonUtil.initTitle;
@@ -38,7 +38,7 @@ import static com.example.sharingparking.utils.Utility.handleMessageResponse;
  * Created by Lizhiguo on 2017/11/29.
  */
 
-public class ParkingActivity extends AppCompatActivity {
+public class ParkingActivity extends AppCompatActivity implements LockAdapter.PublishInterface{
 
     private String TAG = "ParkingActivity";
 
@@ -61,6 +61,7 @@ public class ParkingActivity extends AppCompatActivity {
 
         //从intent中获取数据
         userId = getIntent().getIntExtra("userId",0);
+        Log.d(TAG,this.userId + "");
 
         init();
 
@@ -69,7 +70,8 @@ public class ParkingActivity extends AppCompatActivity {
 
     //跳转到注册车位界面
     public void toRegisterParking(View view){
-        Intent intent = new Intent(this,RegisterParkingActivity.class);
+        Intent intent = new Intent(this,RegisterParkingByUserActivity.class);
+        intent.putExtra("userId",userId);
         startActivity(intent);
     }
 
@@ -85,6 +87,9 @@ public class ParkingActivity extends AppCompatActivity {
         mLockAdapter = new LockAdapter(mParkingLockList);
         mRecyclerView.setAdapter(mLockAdapter);
 
+        //设置发布点击事件接口监听
+        mLockAdapter.setPublishInterface(this);
+
         //配置刷新列表
         //设置颜色
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
@@ -92,15 +97,9 @@ public class ParkingActivity extends AppCompatActivity {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
             @Override
             public void onRefresh() {
-                refreshParking();
+                requestLockMessage();
             }
         });
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
 
         /**
          * 设置刷新
@@ -108,12 +107,23 @@ public class ParkingActivity extends AppCompatActivity {
          */
         mSwipeRefreshLayout.measure(0,0);
         mSwipeRefreshLayout.setRefreshing(true);
+
+        //发起请求
+        requestLockMessage();
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     /**
      * 请求车位锁信息
      */
     private void requestLockMessage(){
+        Log.d(TAG,"开始请求！");
         OkHttpUtils
                 .postString()
                 .url(NET_URL_HEADER + "user/getlocksbyuserid")
@@ -123,7 +133,9 @@ public class ParkingActivity extends AppCompatActivity {
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        toast(ParkingActivity.this,LOCK_REGISTER_ERROR);
+                        toast(ParkingActivity.this,LOCK_REQUEST_ERROR);
+                        //取消刷新效果
+                        mSwipeRefreshLayout.setRefreshing(false);
                     }
 
                     @Override
@@ -131,9 +143,12 @@ public class ParkingActivity extends AppCompatActivity {
                         Log.d(TAG,response);
                         List<ParkingLock> parkingLocks = handleLockResponse(response);
                         if(parkingLocks != null){
+                            Log.d(TAG,mParkingLockList.size() + "");
                             //车位信息请求成功，更新UI
                             mParkingLockList.clear();
-                            mParkingLockList = parkingLocks;
+                            //直接赋值给mParkingLockList，无法使notifyDataSetChanged监听到
+                            mParkingLockList.addAll(parkingLocks);
+                            Log.d(TAG,mParkingLockList.get(0).getLockId() + mParkingLockList.get(0).getAddress());
 
                         }else if(handleMessageResponse(response) != null){
                             //提示错误信息
@@ -144,30 +159,43 @@ public class ParkingActivity extends AppCompatActivity {
                             Toast.makeText(ParkingActivity.this,LOCK_REQUEST_FAIL,
                                     Toast.LENGTH_SHORT).show();
                         }
+
+                        //刷新UI界面
+                        //放到外面由于多线程无法及时接收
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.d(TAG,"请求完毕");
+                                mLockAdapter.notifyDataSetChanged();
+                                //取消刷新效果
+                                mSwipeRefreshLayout.setRefreshing(false);
+                            }
+                        });
+
                     }
                 });
     }
 
-    //刷新车位信息
-    public void refreshParking(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
 
-                //请求车位锁信息
-                requestLockMessage();
 
-                //刷新UI界面
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mLockAdapter.notifyDataSetChanged();
-                        //取消刷新效果
-                        mSwipeRefreshLayout.setRefreshing(false);
-                    }
-                });
-            }
-        }).start();
+    //发布车位
+    @Override
+    public void publish(String lockNo) {
+
+        Intent intent = new Intent(ParkingActivity.this,PublishActivity.class);
+        intent.putExtra("userId",userId);
+        intent.putExtra("lockId",Integer.parseInt(lockNo));
+        startActivity(intent);
+
     }
 
+    //控制车位
+    @Override
+    public void controlMyParking(String lockNo) {
+        Intent intent = new Intent(ParkingActivity.this,ControlParkingActivity.class);
+        intent.putExtra("text_title",getResources().getText(R.string.control_by_bluetooth_method));
+        intent.putExtra("userId",userId);
+        intent.putExtra("lockId",Integer.parseInt(lockNo));
+        startActivity(intent);
+    }
 }

@@ -8,41 +8,20 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="1">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/btn_up"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/up"
-            android:onClick="up"
-            android:background="@drawable/selector1"
-            android:layout_gravity="center"
-            android:textSize="18sp"/>
-
-        <Button
-            android:id="@+id/btn_refresh"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:gravity="center"
-            android:text="@string/refreshConnect"
-            android:onClick="reconnect"
-            android:background="@drawable/selector"/>
-
-        <ImageButton
-            android:id="@+id/btn_down"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="@string/down"
-            android:background="@drawable/selector2"
-            android:onClick="down"
-            android:layout_gravity="center"
-            android:textSize="18sp"/>
+        <include layout="@layout/item_control_parking"></include>
 
     </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:onClick="controlByNet"
+        android:text="@string/control_by_net_method"
+        android:textSize="18sp"/>
 
 </LinearLayout>

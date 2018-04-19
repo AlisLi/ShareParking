@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sharingparking.R;
@@ -41,6 +42,9 @@ import static com.zyao89.view.zloading.Z_TYPE.DOUBLE_CIRCLE;
 
 public class ControlParkingActivity extends AppCompatActivity implements BluetoothReceiver.BluetoothReceiverMessage{
     private String TAG = "ControlParkingActivity";
+
+    private int userId;
+    private int lockId;
 
     // 来自BluetoothChatService Handler的信息类型
     public static final int MESSAGE_STATE_CHANGE = 1;
@@ -74,10 +78,23 @@ public class ControlParkingActivity extends AppCompatActivity implements Bluetoo
     private String PIN = "1111";
     //蓝牙广播接收器
     private BluetoothReceiver mBluetoothReceiver;
+    //title控件
+    private TextView txtTitleText;
 
     @Override
     protected void onStart() {
         super.onStart();
+
+        //请求打开蓝牙
+        openBlueTooth();
+
+        //请求判断蓝牙是否提前打开
+        //如果没有提前打开则不会执行这句，执行openBluetooth的响应结果
+        //如果提前打开则执行下面
+        if(mBluetoothAdapter.isEnabled()){
+            duringDialog("正在连接蓝牙！");
+            searchBlueTooth();
+        }
     }
 
     //蓝牙未打开则打开蓝牙
@@ -93,6 +110,12 @@ public class ControlParkingActivity extends AppCompatActivity implements Bluetoo
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_controlparking);
+
+        init();
+
+    }
+
+    private void init() {
 
         mBluetoothReceiver = new BluetoothReceiver();
         // 动态注册注册广播接收器。接收蓝牙发现讯息
@@ -115,19 +138,11 @@ public class ControlParkingActivity extends AppCompatActivity implements Bluetoo
         // Initialize the BluetoothChatService to perform bluetooth connections
         mChatService = new BluetoothChatService(this, mHandler);
 
-        //请求打开蓝牙
-        openBlueTooth();
+        userId = getIntent().getIntExtra("userId",0);
+        lockId = getIntent().getIntExtra("lockId",0);
 
-        //请求判断蓝牙是否提前打开
-        //如果没有提前打开则不会执行这句，执行openBluetooth的响应结果
-        //如果提前打开则执行下面
-        if(mBluetoothAdapter.isEnabled()){
-            duringDialog("正在连接蓝牙！");
-            searchBlueTooth();
-        }
-
-
-
+        txtTitleText = (TextView) findViewById(R.id.txt_title_common);
+        txtTitleText.setText(getIntent().getStringExtra("text_title"));
     }
 
     //搜索蓝牙设备
@@ -164,15 +179,8 @@ public class ControlParkingActivity extends AppCompatActivity implements Bluetoo
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mBluetoothAdapter.cancelDiscovery();
+
         unregisterReceiver(mBluetoothReceiver);
-        try {
-            Log.d(TAG,device + "  " + device.getBondState());
-            ClsUtils.removeBond(device.getClass(), device);
-        } catch (Exception e) {
-            Log.d(TAG,"解除绑定失败！");
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -368,4 +376,28 @@ public class ControlParkingActivity extends AppCompatActivity implements Bluetoo
             mChatService.connect(device,true);
         }
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mBluetoothAdapter.cancelDiscovery();
+        try {
+            Log.d(TAG,device + "  " + device.getBondState());
+            ClsUtils.removeBond(device.getClass(), device);
+        } catch (Exception e) {
+            Log.d(TAG,"解除绑定失败！");
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 切换到网络控制车位
+     */
+    public void controlByNet(View view){
+        Intent intent = new Intent(ControlParkingActivity.this,ControlParkingByNetActivity.class);
+        intent.putExtra("userId",userId);
+        intent.putExtra("lockId",lockId);
+        startActivity(intent);
+    }
+
 }

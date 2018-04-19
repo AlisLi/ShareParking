@@ -93,6 +93,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
+                        e.printStackTrace();
                         Toast.makeText(LoginActivity.this,LOGIN_ERROR,Toast.LENGTH_LONG).show();
                     }
 

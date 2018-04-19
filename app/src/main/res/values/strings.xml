@@ -55,12 +55,16 @@
     <string name="not_connected">蓝牙未连接</string>
     <string name="reconnect">重新连接</string>
     <string name="refreshConnect">重新连接</string>
-    
+
+    <!--车位控制-->
+    <string name="control_by_net_method">网络控制车位</string>
+    <string name="control_by_bluetooth_method">蓝牙控制车位</string>
+
     <!--发布车位-->
     <string name="publish_parking_no">发布编号：</string>
     <string name="start_time">开始时间：</string>
     <string name="end_time">截止时间：</string>
     <string name="parking_price">车位价格(元/小时)：</string>
-
+    <string name="save">保存</string>
 
 </resources>
