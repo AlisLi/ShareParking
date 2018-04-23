@@ -70,7 +70,7 @@ public class ParkingActivity extends AppCompatActivity implements LockAdapter.Pu
 
     //跳转到注册车位界面
     public void toRegisterParking(View view){
-        Intent intent = new Intent(this,RegisterParkingByUserActivity.class);
+        Intent intent = new Intent(this,RegisterParkingActivity.class);
         intent.putExtra("userId",userId);
         startActivity(intent);
     }
@@ -148,7 +148,6 @@ public class ParkingActivity extends AppCompatActivity implements LockAdapter.Pu
                             mParkingLockList.clear();
                             //直接赋值给mParkingLockList，无法使notifyDataSetChanged监听到
                             mParkingLockList.addAll(parkingLocks);
-                            Log.d(TAG,mParkingLockList.get(0).getLockId() + mParkingLockList.get(0).getAddress());
 
                         }else if(handleMessageResponse(response) != null){
                             //提示错误信息
@@ -183,6 +182,7 @@ public class ParkingActivity extends AppCompatActivity implements LockAdapter.Pu
     public void publish(String lockNo) {
 
         Intent intent = new Intent(ParkingActivity.this,PublishActivity.class);
+        intent.putExtra("text_title",getResources().getText(R.string.set_publish_time));
         intent.putExtra("userId",userId);
         intent.putExtra("lockId",Integer.parseInt(lockNo));
         startActivity(intent);
@@ -191,11 +191,12 @@ public class ParkingActivity extends AppCompatActivity implements LockAdapter.Pu
 
     //控制车位
     @Override
-    public void controlMyParking(String lockNo) {
+    public void controlMyParking(int lockNo,int bluetoothId) {
         Intent intent = new Intent(ParkingActivity.this,ControlParkingActivity.class);
         intent.putExtra("text_title",getResources().getText(R.string.control_by_bluetooth_method));
         intent.putExtra("userId",userId);
-        intent.putExtra("lockId",Integer.parseInt(lockNo));
+        intent.putExtra("lockId",lockNo);
+        intent.putExtra("blueToothId",bluetoothId);
         startActivity(intent);
     }
 }

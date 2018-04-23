@@ -49,7 +49,7 @@ public class ControlParkingByNetActivity extends AppCompatActivity {
                 .postString()
                 .url(NET_URL_HEADER + "user/temp")
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
-                .content("{\"msg\":" + "\"301#\"" + "}")
+                .content("{\"msg\":" + lockId + "\"1#\"" + "}")
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -79,7 +79,7 @@ public class ControlParkingByNetActivity extends AppCompatActivity {
                 .postString()
                 .url(NET_URL_HEADER + "user/temp")
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
-                .content("{\"msg\":" + "\"300#\"" + "}")
+                .content("{\"msg\":" + lockId + "\"0#\"" + "}")
                 .build()
                 .execute(new StringCallback() {
                     @Override

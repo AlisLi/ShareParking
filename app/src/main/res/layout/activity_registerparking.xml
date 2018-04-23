@@ -28,6 +28,14 @@
         android:layout_margin="10dp"
         android:layout_gravity="center"
         android:text="保存"
-        android:onClick="toCarParkingRecyclerView"/>
+        android:onClick="registerLock"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="10dp"
+        android:onClick="userRegister"
+        android:text="用户自行注册"/>
 
 </LinearLayout>

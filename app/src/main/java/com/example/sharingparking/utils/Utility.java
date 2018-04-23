@@ -12,8 +12,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +52,7 @@ public class Utility {
 
         try {
             user.setUserName(jsonObject.getString("userName"));
-            user.setUserId(jsonObject.getInt("userId"));
+            user.setUserId(handleInteger(jsonObject,"userId"));
             user.setPhoneNumber(jsonObject.getString("phoneNumber"));
             user.setPassword(jsonObject.getString("password"));
             user.setUserMoney(jsonObject.getDouble("userMoney"));
@@ -65,17 +63,13 @@ public class Utility {
         }
     }
 
-    public static List<BlueTooth> handleBlueToothResponse(String response){
+    public static BlueTooth handleBlueToothResponse(String response){
         if(!TextUtils.isEmpty(response)){
             try {
-                List<BlueTooth> list = new ArrayList<>();
-                JSONArray blueTooths = new JSONArray(response);
-                for(int i = 0;i < blueTooths.length();i++){
-                    JSONObject bluetoothObject = blueTooths.getJSONObject(i);
-                    BlueTooth blueTooth = getBlueToothJson(bluetoothObject);
-                    list.add(blueTooth);
-                }
-                return list;
+                JSONObject bluetoothObject = new JSONObject(response);
+                BlueTooth blueTooth = getBlueToothJson(bluetoothObject);
+
+                return blueTooth;
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -139,27 +133,28 @@ public class Utility {
 
         try {
             ParkingLock parkingLock = new ParkingLock();
-
-            parkingLock.setLockId(jsonObject.getInt("lockId"));
-            parkingLock.setUserId(jsonObject.getInt("userId"));
-            parkingLock.setBlueToothId(jsonObject.getInt("blueToothId"));
-            parkingLock.setAddress(URLDecoder.decode(jsonObject.getString("address"), "UTF-8"));
-            Log.d(UTILITY_TAG,URLDecoder.decode(jsonObject.getString("address"),"UTF-8"));
-            parkingLock.setBattery(jsonObject.getInt("battery"));
-            parkingLock.setInfrared(jsonObject.getInt("infrared"));
-            parkingLock.setLed(jsonObject.getInt("led"));
-            parkingLock.setLockState(jsonObject.getInt("lockState"));
+            parkingLock.setLockId(handleInteger(jsonObject,"lockId"));
+            parkingLock.setUserId(handleInteger(jsonObject,"userId"));
+            parkingLock.setBlueToothId(handleInteger(jsonObject,"blueToothId"));
+            parkingLock.setAddress(jsonObject.getString("address"));
+            parkingLock.setBattery(handleInteger(jsonObject,"battery"));
+            parkingLock.setInfrared(handleInteger(jsonObject,"infrared"));
+            parkingLock.setLed(handleInteger(jsonObject,"led"));
+            parkingLock.setLockState(handleInteger(jsonObject,"lockState"));
 
             return parkingLock;
 
         } catch (JSONException e) {
             e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
         }
         return null;
     }
 
+    /**
+     * 处理和解析车位发布Json信息
+     * @param response
+     * @return
+     */
     public static List<Publish> handlePublishResponse(String response){
         if(!TextUtils.isEmpty(response)){
             try {
@@ -181,6 +176,23 @@ public class Utility {
     }
 
     /**
+     * 处理和解析车位发布Json信息
+     * @param response
+     * @return
+     */
+    public static Publish handlePublishObjectResponse(String response){
+        if(!TextUtils.isEmpty(response)){
+
+            JSONObject publishJSONObject = new JSONObject();
+            Publish publish = getPublishJson(publishJSONObject);
+
+            return publish;
+        }
+
+        return null;
+    }
+
+    /**
      * 获取车位锁发布json数据
      * @param publishJSONObject
      * @return
@@ -189,12 +201,14 @@ public class Utility {
         try {
             Publish publish = new Publish();
 
-            publish.setPublishId(publishJSONObject.getInt("publishId"));
-            publish.setLockId(publishJSONObject.getInt("lockId"));
+            publish.setPublishId(handleInteger(publishJSONObject,"publishId"));
+            publish.setLock(handleInteger(publishJSONObject,"lockId"));
             publish.setPublishStartTime(publishJSONObject.getString("startTime"));
             publish.setPublishEndTime(publishJSONObject.getString("endTime"));
             publish.setParkingMoney(publishJSONObject.getDouble("parkingMoney"));
-            publish.setPublishState(publishJSONObject.getInt("publishState"));
+            publish.setPublishState(handleInteger(publishJSONObject,"publishState"));
+            publish.setWay(handleInteger(publishJSONObject,"way"));
+            publish.setUser(handleInteger(publishJSONObject,"userId"));
 
             return publish;
 
@@ -233,10 +247,11 @@ public class Utility {
     private static BlueTooth getBlueToothJson(JSONObject jsonObject){
         BlueTooth blueTooth = new BlueTooth();
         try {
-            blueTooth.setBlueToothId(jsonObject.getInt("blueToothId"));
-            blueTooth.setBlueToothName(jsonObject.getString("blueToothName"));
-            blueTooth.setBlueToothPassword(jsonObject.getString("blueToothPassword"));
-            blueTooth.setBlueToothState(jsonObject.getInt("blueToothState"));
+            blueTooth.setBluetoothId(handleInteger(jsonObject,"blueToothId"));
+            blueTooth.setBluetoothName(jsonObject.getString("blueToothName"));
+            blueTooth.setBluetoothPassword(jsonObject.getString("blueToothPassword"));
+            blueTooth.setBluetoothState(handleInteger(jsonObject,"bluetoothState"));
+            blueTooth.setBluetoothMAC(jsonObject.getString("macAddress"));
 
             return blueTooth;
         } catch (JSONException e) {
@@ -246,6 +261,15 @@ public class Utility {
         return null;
     }
 
+    private static Integer handleInteger(JSONObject jsonObject,String key){
 
+        try {
+            Integer data = jsonObject.getInt(key);
+            return data;
+        } catch (JSONException e) {
+            return null;
+        }
+
+    }
 
 }

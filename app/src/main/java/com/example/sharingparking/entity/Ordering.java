@@ -6,52 +6,20 @@ package com.example.sharingparking.entity;
  */
 
 public class Ordering {
-    private int OrderingId; //订单ID
+    private Integer OrderingId; //订单ID
     private ParkingLock lock;    //发布信息
     private User user;  //租用者
     private String startTime;  //订单下单时间
     private String endTime;     //截止时间
-    private int orderingState;  //订单状态
+    private Integer orderingState;  //订单状态
     private double expense;       //支付金额
 
-    public User getUser() {
-        return user;
+    public Integer getOrderingId() {
+        return OrderingId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
-
-    public int getOrderingState() {
-        return orderingState;
-    }
-
-    public void setOrderingState(int orderingState) {
-        this.orderingState = orderingState;
-    }
-
-    public double getExpense() {
-        return expense;
-    }
-
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
-    public void setExpense(double expense) {
-        this.expense = expense;
+    public void setOrderingId(Integer orderingId) {
+        OrderingId = orderingId;
     }
 
     public ParkingLock getLock() {
@@ -62,11 +30,43 @@ public class Ordering {
         this.lock = lock;
     }
 
-    public int getOrderingId() {
-        return OrderingId;
+    public User getUser() {
+        return user;
     }
 
-    public void setOrderingId(int orderingId) {
-        OrderingId = orderingId;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public Integer getOrderingState() {
+        return orderingState;
+    }
+
+    public void setOrderingState(Integer orderingState) {
+        this.orderingState = orderingState;
+    }
+
+    public double getExpense() {
+        return expense;
+    }
+
+    public void setExpense(double expense) {
+        this.expense = expense;
     }
 }

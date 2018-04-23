@@ -6,62 +6,46 @@ package com.example.sharingparking.entity;
  */
 
 public class ParkingLock {
-    private int lockId;     //锁编号
-    private int userId;     //用户ID
-    private int blueToothId;    //蓝牙ID
+    private Integer lockId;     //锁编号
+    private Integer userId;     //用户ID
+    private Integer blueToothId;    //蓝牙ID
     private String address;     //车位位置
-    private int lockState;  //锁的状态
-    private int infrared;   //红外线状态
-    private int led;        //LED灯状态
-    private int battery;    //电池状态
+    private Integer lockState;  //锁的状态
+    private Integer infrared;   //红外线状态
+    private Integer led;        //LED灯状态
+    private Integer battery;    //电池状态
 
     public ParkingLock() {
     }
 
-    public ParkingLock(int lockId, int userId, String address) {
+    public ParkingLock(Integer lockId, Integer userId, String address) {
         this.lockId = lockId;
         this.userId = userId;
         this.address = address;
     }
 
-    public int getLockId() {
+    public Integer getLockId() {
         return lockId;
     }
 
-    public void setLockId(int lockId) {
+    public void setLockId(Integer lockId) {
         this.lockId = lockId;
     }
 
-    public int getLockState() {
-        return lockState;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setLockState(int lockState) {
-        this.lockState = lockState;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
-    public int getInfrared() {
-        return infrared;
+    public Integer getBlueToothId() {
+        return blueToothId;
     }
 
-    public void setInfrared(int infrared) {
-        this.infrared = infrared;
-    }
-
-    public int getLed() {
-        return led;
-    }
-
-    public void setLed(int led) {
-        this.led = led;
-    }
-
-    public int getBattery() {
-        return battery;
-    }
-
-    public void setBattery(int battery) {
-        this.battery = battery;
+    public void setBlueToothId(Integer blueToothId) {
+        this.blueToothId = blueToothId;
     }
 
     public String getAddress() {
@@ -72,19 +56,35 @@ public class ParkingLock {
         this.address = address;
     }
 
-    public int getUserId() {
-        return userId;
+    public Integer getLockState() {
+        return lockState;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setLockState(Integer lockState) {
+        this.lockState = lockState;
     }
 
-    public int getBlueToothId() {
-        return blueToothId;
+    public Integer getInfrared() {
+        return infrared;
     }
 
-    public void setBlueToothId(int blueToothId) {
-        this.blueToothId = blueToothId;
+    public void setInfrared(Integer infrared) {
+        this.infrared = infrared;
+    }
+
+    public Integer getLed() {
+        return led;
+    }
+
+    public void setLed(Integer led) {
+        this.led = led;
+    }
+
+    public Integer getBattery() {
+        return battery;
+    }
+
+    public void setBattery(Integer battery) {
+        this.battery = battery;
     }
 }

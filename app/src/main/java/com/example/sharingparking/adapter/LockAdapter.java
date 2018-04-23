@@ -92,7 +92,7 @@ public class LockAdapter extends RecyclerView.Adapter<LockAdapter.ViewHolder>{
             @Override
             public void onClick(View v) {
                 //利用接口，处理点击控制事件
-                mPublishInterface.controlMyParking(holder.txtLockNo.getText().toString());
+                mPublishInterface.controlMyParking(parking.getLockId(),parking.getBlueToothId());
             }
         });
         /**
@@ -112,7 +112,7 @@ public class LockAdapter extends RecyclerView.Adapter<LockAdapter.ViewHolder>{
 
     public interface PublishInterface{
         public void publish(String lockNo);
-        public void controlMyParking(String lockNo);
+        public void controlMyParking(int lockNo,int bluetoothId);
     }
 
     public void setPublishInterface(PublishInterface publishInterface){

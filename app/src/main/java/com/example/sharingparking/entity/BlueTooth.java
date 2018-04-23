@@ -6,40 +6,49 @@ package com.example.sharingparking.entity;
  */
 
 public class BlueTooth {
-    private int blueToothId;    //蓝牙编号
-    private String BlueToothName;   //蓝牙名称
-    private String BlueToothPassword;   //蓝牙密码
-    private int BlueToothState;  //蓝牙状态
+    private Integer bluetoothId;    //蓝牙编号
+    private String bluetoothName;   //蓝牙名称
+    private String bluetoothPassword;   //蓝牙密码
+    private Integer bluetoothState;  //蓝牙状态
+    private String bluetoothMAC;    //蓝牙MAC地址
 
-    public int getBlueToothId() {
-        return blueToothId;
+    public Integer getBluetoothId() {
+        return bluetoothId;
     }
 
-    public void setBlueToothId(int blueToothId) {
-        this.blueToothId = blueToothId;
+    public void setBluetoothId(Integer bluetoothId) {
+        this.bluetoothId = bluetoothId;
     }
 
-    public String getBlueToothName() {
-        return BlueToothName;
+    public String getBluetoothName() {
+        return bluetoothName;
     }
 
-    public void setBlueToothName(String blueToothName) {
-        BlueToothName = blueToothName;
+    public void setBluetoothName(String bluetoothName) {
+        this.bluetoothName = bluetoothName;
     }
 
-    public String getBlueToothPassword() {
-        return BlueToothPassword;
+    public String getBluetoothPassword() {
+        return bluetoothPassword;
     }
 
-    public void setBlueToothPassword(String blueToothPassword) {
-        BlueToothPassword = blueToothPassword;
+    public void setBluetoothPassword(String bluetoothPassword) {
+        this.bluetoothPassword = bluetoothPassword;
     }
 
-    public int getBlueToothState() {
-        return BlueToothState;
+    public Integer getBluetoothState() {
+        return bluetoothState;
     }
 
-    public void setBlueToothState(int blueToothState) {
-        BlueToothState = blueToothState;
+    public void setBluetoothState(Integer bluetoothState) {
+        this.bluetoothState = bluetoothState;
+    }
+
+    public String getBluetoothMAC() {
+        return bluetoothMAC;
+    }
+
+    public void setBluetoothMAC(String bluetoothMAC) {
+        this.bluetoothMAC = bluetoothMAC;
     }
 }

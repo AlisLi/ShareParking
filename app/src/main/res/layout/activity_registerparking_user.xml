@@ -99,4 +99,12 @@
         android:text="保存"
         android:onClick="toCarParkingRecyclerViewUser"/>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_gravity="bottom"
+        android:text="工作人员注册"
+        android:onClick="staffRegister"/>
+
 </LinearLayout>

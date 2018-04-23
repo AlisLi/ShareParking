@@ -6,18 +6,20 @@ package com.example.sharingparking.entity;
  */
 
 public class Publish {
-    private int publishId;          //发布编号
+    private Integer publishId;          //发布编号
     private String publishStartTime;   //发布开始时间
     private String publishEndTime;  //发布截止时间
-    private int lockId;   //锁
-    private double ParkingMoney;   //车位金额
-    private int publishState;   //发布状态
+    private Integer user;//用户ID
+    private Integer lock;   //锁
+    private double parkingMoney;   //车位金额
+    private Integer publishState;   //发布状态
+    private Integer way;   //发布方式
 
-    public int getPublishId() {
+    public Integer getPublishId() {
         return publishId;
     }
 
-    public void setPublishId(int publishId) {
+    public void setPublishId(Integer publishId) {
         this.publishId = publishId;
     }
 
@@ -37,27 +39,43 @@ public class Publish {
         this.publishEndTime = publishEndTime;
     }
 
-    public int getLockId() {
-        return lockId;
+    public Integer getUser() {
+        return user;
     }
 
-    public void setLockId(int lockId) {
-        this.lockId = lockId;
+    public void setUser(Integer user) {
+        this.user = user;
+    }
+
+    public Integer getLock() {
+        return lock;
+    }
+
+    public void setLock(Integer lock) {
+        this.lock = lock;
     }
 
     public double getParkingMoney() {
-        return ParkingMoney;
+        return parkingMoney;
     }
 
     public void setParkingMoney(double parkingMoney) {
-        ParkingMoney = parkingMoney;
+        this.parkingMoney = parkingMoney;
     }
 
-    public int getPublishState() {
+    public Integer getPublishState() {
         return publishState;
     }
 
-    public void setPublishState(int publishState) {
+    public void setPublishState(Integer publishState) {
         this.publishState = publishState;
+    }
+
+    public Integer getWay() {
+        return way;
+    }
+
+    public void setWay(Integer way) {
+        this.way = way;
     }
 }

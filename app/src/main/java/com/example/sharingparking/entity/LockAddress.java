@@ -7,15 +7,15 @@ package com.example.sharingparking.entity;
 
 public class LockAddress {
 
-    private int lockAddressId;//锁的地址ID
+    private Integer lockAddressId;//锁的地址ID
     private String lockLocationAddress;//锁的定位地址
     private String lockDetailAddress;//锁的详细地址
 
-    public int getLockAddressId() {
+    public Integer getLockAddressId() {
         return lockAddressId;
     }
 
-    public void setLockAddressId(int lockAddressId) {
+    public void setLockAddressId(Integer lockAddressId) {
         this.lockAddressId = lockAddressId;
     }
 

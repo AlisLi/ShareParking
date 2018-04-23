@@ -411,4 +411,9 @@ public class RegisterParkingByUserActivity extends AppCompatActivity {
                     + "\n设备状态: " + this.getStatus();
         }
     }*/
+
+    //工作人员注册
+    public void staffRegister(){
+        onBackPressed();
+    }
 }

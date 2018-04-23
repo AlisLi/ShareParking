@@ -8,8 +8,7 @@ public class Common {
 
     //访问服务器的url前置部分
 //   public static final String NET_URL_HEADER = "http://192.168.1.107:8080/sharepark/";
-     public static final String NET_URL_HEADER = "https://superrocket.cn/sharepark/";
-//    public static final String NET_URL_HEADER = "http://172.0.0.9/sharepark/";
+   public static final String NET_URL_HEADER = "https://superrocket.cn/sharepark/";
 
     public static final String TAG_SHOW = "lzg";
 
@@ -59,11 +58,19 @@ public class Common {
      */
     public static final String LOCK_PUBLISH_ERROR = "车位锁发布信息异常";
     public static final String LOCK_PUBLISH_FAIL = "车位锁发布信息失败";
+    public static final String LOCK_PUBLISH_SUCCESS = "车位锁发布信息成功";
+    public static final String PARKING_PRICE_INPUT_ERROR = "车位价格输入错误";
 
     /**
      * 输入信息异常
      */
     public static final String INPUT_NOT_COMPLETE = "输入信息不完整";
+
+    /**
+     * 蓝牙信息
+     */
+    public static final String BT_REQUEST_ERROR = "蓝牙信息获取异常";
+    public static final String BT_REQUEST_FAIL = "蓝牙信息获取失败";
 
 
 }

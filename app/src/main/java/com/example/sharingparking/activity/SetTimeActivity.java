@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.sharingparking.R;
@@ -24,17 +23,17 @@ public class SetTimeActivity extends AppCompatActivity{
     protected SimpleDateFormat mFormatter = new SimpleDateFormat("MMMM dd yyyy hh:mm aa");
 
     protected TextView txtTitle;
-    protected EditText etStartTime;
-    protected EditText etEndTime;
+    protected TextView txtStartTime;
+    protected TextView txtEndTime;
 
-    //截止时间选择器监听器
-    private SlideDateTimeListener endTimeListener = new SlideDateTimeListener() {
+    //开始时间选择器监听器
+    private SlideDateTimeListener startTimeListener = new SlideDateTimeListener() {
 
         @Override
         public void onDateTimeSet(Date date)
         {
             //点击确定
-            clickOk(etEndTime,date);
+            clickOk(txtStartTime,date);
         }
 
         @Override
@@ -45,14 +44,14 @@ public class SetTimeActivity extends AppCompatActivity{
         }
     };
 
-    //开始时间选择器监听器
-    private SlideDateTimeListener startTimeListener = new SlideDateTimeListener() {
+    //截止时间选择器监听器
+    private SlideDateTimeListener endTimeListener = new SlideDateTimeListener() {
 
         @Override
         public void onDateTimeSet(Date date)
         {
             //点击确定
-            clickOk(etStartTime,date);
+            clickOk(txtEndTime,date);
         }
 
         @Override
@@ -64,9 +63,9 @@ public class SetTimeActivity extends AppCompatActivity{
     };
 
     //处理点击确定的事件
-    private void clickOk(EditText editText,Date date) {
+    private void clickOk(TextView textView,Date date) {
         //设置editText的值
-        editText.setText(mFormatter.format(date));
+        textView.setText(date.toString());
     }
 
     //处理点击取消的事件
@@ -77,7 +76,7 @@ public class SetTimeActivity extends AppCompatActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_set_time);
+        setContentView(R.layout.activity_publish_time);
 
         init();
 
@@ -86,11 +85,15 @@ public class SetTimeActivity extends AppCompatActivity{
 
 
     private void init() {
+        txtTitle = (TextView) findViewById(R.id.txt_title_common);
 
-        etStartTime = (EditText) findViewById(R.id.et_start_time);
-        etEndTime = (EditText) findViewById(R.id.et_end_time);
+        txtTitle.setText(getIntent().getStringExtra("text_title"));
+        txtStartTime = (TextView) findViewById(R.id.et_start_time);
+        txtEndTime = (TextView) findViewById(R.id.et_end_time);
+
 
     }
+
 
     //点击开始时间editText
     public void setStartTime(View view){

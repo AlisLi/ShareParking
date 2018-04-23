@@ -6,7 +6,7 @@ package com.example.sharingparking.entity;
  */
 
 public class User {
-    private int userId;     //用户ID
+    private Integer userId;     //用户ID
     private String userName;    //用户名
     private String phoneNumber; //手机号
     private String password;    //密码
@@ -15,16 +15,24 @@ public class User {
     public User() {
     }
 
+    public User(String userName, String phoneNumber, String password, double userMoney) {
+        this.userId = userId;
+        this.phoneNumber = phoneNumber;
+        this.password = password;
+        this.userMoney = userMoney;
+    }
+
     public User(String phoneNumber, String password) {
         this.phoneNumber = phoneNumber;
         this.password = password;
     }
 
-    public User(String userName, String phoneNumber, String password, double userMoney) {
-        this.userName = userName;
-        this.phoneNumber = phoneNumber;
-        this.password = password;
-        this.userMoney = userMoney;
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getUserName() {
@@ -51,14 +59,6 @@ public class User {
         this.password = password;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
     public double getUserMoney() {
         return userMoney;
     }
@@ -66,5 +66,4 @@ public class User {
     public void setUserMoney(double userMoney) {
         this.userMoney = userMoney;
     }
-
 }

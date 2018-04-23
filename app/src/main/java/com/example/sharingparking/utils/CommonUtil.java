@@ -54,4 +54,18 @@ public class CommonUtil {
         txtTitle.setText(titleText);//设置标题
     }
 
+    /**
+     * 验证是否为Double字符串
+     */
+    public static boolean isDoubleNumber(String string){
+
+        try {
+            Double number = Double.parseDouble(string);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+
+    }
+
 }

@@ -67,7 +67,7 @@ public class PublishedAdapter extends RecyclerView.Adapter<PublishedAdapter.View
     public void onBindViewHolder(ViewHolder holder, int position) {
         Publish publish = mPublishes.get(position);
         holder.txtPublishNo.setText(publish.getPublishId());
-        holder.txtLockNo.setText(publish.getLockId());
+        holder.txtLockNo.setText(publish.getLock());
         holder.txtStartTime.setText(publish.getPublishStartTime());
         holder.txtEndTime.setText(publish.getPublishEndTime());
         holder.txtParkingPrice.setText(publish.getParkingMoney() + "");

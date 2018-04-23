@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#ebebeb">
+
+    <include layout="@layout/title_common"></include>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:text="@string/set_start_time"
+        android:textSize="20dp"
+        android:onClick="setStartTime"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="12dp"/>
+
+    <TextView
+        android:id="@+id/et_start_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="12dp"
+        android:textSize="18sp"
+        android:hint="点击按钮设置开始时间"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:text="@string/set_end_time"
+        android:textSize="20dp"
+        android:onClick="setEndTime"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="12dp"/>
+
+    <TextView
+        android:id="@+id/et_end_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="12dp"
+        android:hint="点击按钮设置截止时间"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/parking_price"
+        android:textSize="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="12dp"/>
+
+    <EditText
+        android:id="@+id/et_parking_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="12dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="@string/publish_style"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="12dp"/>
+
+    <RadioGroup
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rbt_time_dividable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="时间可分割"/>
+
+        <RadioButton
+            android:id="@+id/rbt_time_not_dividable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="时间不可分割"/>
+
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/save_time"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_gravity="center"
+        android:text="@string/save"
+        android:onClick="saveTime"/>
+
+</LinearLayout>

@@ -17,13 +17,21 @@ import android.widget.Toast;
 
 import com.example.sharingparking.R;
 import com.example.sharingparking.SysApplication;
+import com.example.sharingparking.entity.BlueTooth;
 import com.example.sharingparking.utils.BluetoothChatService;
 import com.example.sharingparking.utils.BluetoothReceiver;
 import com.example.sharingparking.utils.ClsUtils;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 import com.zyao89.view.zloading.ZLoadingDialog;
 
 import java.util.Set;
 
+import okhttp3.Call;
+import okhttp3.MediaType;
+
+import static com.example.sharingparking.common.Common.BT_REQUEST_ERROR;
+import static com.example.sharingparking.common.Common.BT_REQUEST_FAIL;
 import static com.example.sharingparking.common.Common.LOCK_BAR_STATE;
 import static com.example.sharingparking.common.Common.LOCK_DOWN;
 import static com.example.sharingparking.common.Common.LOCK_DOWNING_STATE;
@@ -32,7 +40,10 @@ import static com.example.sharingparking.common.Common.LOCK_OVER_UP_STATE;
 import static com.example.sharingparking.common.Common.LOCK_UP;
 import static com.example.sharingparking.common.Common.LOCK_UPPING_STATE;
 import static com.example.sharingparking.common.Common.LOCK_UP_STATE;
+import static com.example.sharingparking.common.Common.NET_URL_HEADER;
 import static com.example.sharingparking.utils.CommonUtil.toast;
+import static com.example.sharingparking.utils.Utility.handleBlueToothResponse;
+import static com.example.sharingparking.utils.Utility.handleMessageResponse;
 import static com.zyao89.view.zloading.Z_TYPE.DOUBLE_CIRCLE;
 
 /**
@@ -45,6 +56,7 @@ public class ControlParkingActivity extends AppCompatActivity implements Bluetoo
 
     private int userId;
     private int lockId;
+    private int bluetoothId;
 
     // 来自BluetoothChatService Handler的信息类型
     public static final int MESSAGE_STATE_CHANGE = 1;
@@ -81,6 +93,11 @@ public class ControlParkingActivity extends AppCompatActivity implements Bluetoo
     //title控件
     private TextView txtTitleText;
 
+    public static final String ACTION_INIT_DATA = "com.example.sharingparking.utils.BluetoothReceiver";
+
+    //标识障碍物状态的变化标志
+    private int barFlag = 0;
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -92,8 +109,8 @@ public class ControlParkingActivity extends AppCompatActivity implements Bluetoo
         //如果没有提前打开则不会执行这句，执行openBluetooth的响应结果
         //如果提前打开则执行下面
         if(mBluetoothAdapter.isEnabled()){
-            duringDialog("正在连接蓝牙！");
-            searchBlueTooth();
+            //请求服务器锁的信息
+            requestBluetooth();
         }
     }
 
@@ -123,7 +140,12 @@ public class ControlParkingActivity extends AppCompatActivity implements Bluetoo
         btFilter.setPriority(1000);
         btFilter.addAction(BluetoothDevice.ACTION_FOUND);
         btFilter.addAction(BluetoothDevice.ACTION_PAIRING_REQUEST);
+        btFilter.addAction(ACTION_INIT_DATA);
         this.registerReceiver(mBluetoothReceiver,btFilter);
+
+        userId = getIntent().getIntExtra("userId",0);
+        lockId = getIntent().getIntExtra("lockId",0);
+        bluetoothId = getIntent().getIntExtra("blueToothId",bluetoothId);
 
         //设置广播信息接口监听器
         mBluetoothReceiver.setReceiverMessageListener(this);
@@ -138,11 +160,67 @@ public class ControlParkingActivity extends AppCompatActivity implements Bluetoo
         // Initialize the BluetoothChatService to perform bluetooth connections
         mChatService = new BluetoothChatService(this, mHandler);
 
-        userId = getIntent().getIntExtra("userId",0);
-        lockId = getIntent().getIntExtra("lockId",0);
-
         txtTitleText = (TextView) findViewById(R.id.txt_title_common);
         txtTitleText.setText(getIntent().getStringExtra("text_title"));
+    }
+
+
+    //蓝牙信息获取失败
+    private void requestFail(){
+        dialog.cancel();
+        duringDialog("车位锁连接失败！");
+        cancleSecondDialog();
+        mBluetoothAdapter.cancelDiscovery();
+    }
+
+    private void requestBluetooth() {
+        Log.d(TAG,bluetoothId + "intentBluetoothId");
+        //请求蓝牙信息
+        OkHttpUtils
+                .postString()
+                .url(NET_URL_HEADER + "user/getbluetoothbyid")
+                .mediaType(MediaType.parse("application/json; charset=utf-8"))
+                .content("{\"blueToothId\":" + bluetoothId + "}")
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        toast(ControlParkingActivity.this,BT_REQUEST_ERROR);
+                        e.printStackTrace();
+                        requestFail();
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        Log.d(TAG,response);
+                        BlueTooth bluetooth = handleBlueToothResponse(response);
+                        if(bluetooth != null){
+                            //蓝牙信息请求成功，将信息发送给广播
+                            Intent intent = new Intent();
+                            intent.setAction(ACTION_INIT_DATA);
+                            intent.putExtra("bluetoothMAC",bluetooth.getBluetoothMAC());
+                            intent.putExtra("bluetoothName",bluetooth.getBluetoothName());
+                            intent.putExtra("pin",bluetooth.getBluetoothPassword());
+                            sendBroadcast(intent);
+
+                            //前台进行连接
+                            duringDialog("正在连接蓝牙！");
+                            searchBlueTooth();
+
+                        }else if(handleMessageResponse(response) != null){
+                            //提示错误信息
+                            Toast.makeText(ControlParkingActivity.this,handleMessageResponse(response),
+                                    Toast.LENGTH_SHORT).show();
+                            requestFail();
+                        }else{
+                            //车位信息请求失败
+                            Toast.makeText(ControlParkingActivity.this,BT_REQUEST_FAIL,
+                                    Toast.LENGTH_SHORT).show();
+                            requestFail();
+                        }
+                    }
+                });
+
     }
 
     //搜索蓝牙设备
@@ -179,7 +257,6 @@ public class ControlParkingActivity extends AppCompatActivity implements Bluetoo
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         unregisterReceiver(mBluetoothReceiver);
     }
 
@@ -227,7 +304,7 @@ public class ControlParkingActivity extends AppCompatActivity implements Bluetoo
             public void run() {
                 dialog.cancel();
             }
-        }, 500);
+        }, 1000);
     }
 
     // 通过Handle获取BluetoothService返回的信息
@@ -265,8 +342,14 @@ public class ControlParkingActivity extends AppCompatActivity implements Bluetoo
 
                     if(LOCK_BAR_STATE.equals(readMessage)){
                         //有障碍物
-                        toast(ControlParkingActivity.this,"上方有障碍物！");
-                        lockState = LOCK_BAR_STATE;
+                        if(barFlag == 0){
+                            //第一次接受有障碍物的消息，取消正在打开的dialog，设置障碍物dialog
+                            dialog.cancel();
+                            duringDialog("上方有障碍物！");
+                            lockState = LOCK_BAR_STATE;
+                            barFlag = 1;
+                        }
+
                     }else {
                         if(LOCK_DOWN_STATE.equals(lockState)){
                             //锁处于0度状态
@@ -302,6 +385,9 @@ public class ControlParkingActivity extends AppCompatActivity implements Bluetoo
                                 duringDialog("锁正在关闭！");
                                 lockState = LOCK_DOWNING_STATE;
                             }
+                        }else if(LOCK_BAR_STATE.equals(lockState)){
+                            dialog.cancel();
+                            barFlag = 0;
                         }
 
                         lockState = readMessage;
@@ -355,9 +441,7 @@ public class ControlParkingActivity extends AppCompatActivity implements Bluetoo
                 if(resultCode == RESULT_OK){
                     //获得蓝牙权限成功
                     //需要再写一次，oncreate里的下面的方法无法执行
-                    duringDialog("正在连接蓝牙！");
-                    //搜索蓝牙
-                    searchBlueTooth();
+                    requestBluetooth();
                 }else if(resultCode == RESULT_CANCELED){
                     //获得蓝牙权限失败
                     toast(ControlParkingActivity.this,"蓝牙权限获取失败，请打开蓝牙！");

@@ -96,6 +96,8 @@
         </activity>
         <activity android:name=".activity.ControlParkingByNetActivity">
         </activity>
+        <activity android:name=".activity.RegisterParkingActivity">
+        </activity>
         <!--拦截配对框，实行自动配对
         <receiver android:name=".utils.BluetoothReceiver" >
             <intent-filter android:priority="1000">
