@@ -1,5 +1,7 @@
 package com.example.sharingparking.entity;
 
+import java.util.Date;
+
 /**
  * 实体类：车位发布
  * Created by Lizhiguo on 2018/3/26.
@@ -7,10 +9,10 @@ package com.example.sharingparking.entity;
 
 public class Publish {
     private Integer publishId;          //发布编号
-    private String publishStartTime;   //发布开始时间
-    private String publishEndTime;  //发布截止时间
-    private Integer user;//用户ID
-    private Integer lock;   //锁
+    private Date publishStartTime;   //发布开始时间
+    private Date publishEndTime;  //发布截止时间
+    private Integer userId;//用户ID
+    private Integer lockId;   //锁
     private double parkingMoney;   //车位金额
     private Integer publishState;   //发布状态
     private Integer way;   //发布方式
@@ -23,36 +25,36 @@ public class Publish {
         this.publishId = publishId;
     }
 
-    public String getPublishStartTime() {
+    public Date getPublishStartTime() {
         return publishStartTime;
     }
 
-    public void setPublishStartTime(String publishStartTime) {
+    public void setPublishStartTime(Date publishStartTime) {
         this.publishStartTime = publishStartTime;
     }
 
-    public String getPublishEndTime() {
+    public Date getPublishEndTime() {
         return publishEndTime;
     }
 
-    public void setPublishEndTime(String publishEndTime) {
+    public void setPublishEndTime(Date publishEndTime) {
         this.publishEndTime = publishEndTime;
     }
 
-    public Integer getUser() {
-        return user;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUser(Integer user) {
-        this.user = user;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
-    public Integer getLock() {
-        return lock;
+    public Integer getLockId() {
+        return lockId;
     }
 
-    public void setLock(Integer lock) {
-        this.lock = lock;
+    public void setLockId(Integer lockId) {
+        this.lockId = lockId;
     }
 
     public double getParkingMoney() {

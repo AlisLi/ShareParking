@@ -195,6 +195,7 @@ public class ControlParkingActivity extends AppCompatActivity implements Bluetoo
                         Log.d(TAG,response);
                         BlueTooth bluetooth = handleBlueToothResponse(response);
                         if(bluetooth != null){
+
                             //蓝牙信息请求成功，将信息发送给广播
                             Intent intent = new Intent();
                             intent.setAction(ACTION_INIT_DATA);
@@ -235,7 +236,8 @@ public class ControlParkingActivity extends AppCompatActivity implements Bluetoo
             Log.d(TAG,"搜索蓝牙中");
             //搜索蓝牙设备
             mBluetoothAdapter.startDiscovery();
-        }
+            Log.d(TAG,mBluetoothAdapter.startDiscovery() + "");
+    }
     }
 
     //判断蓝牙是否已经绑定
@@ -280,10 +282,15 @@ public class ControlParkingActivity extends AppCompatActivity implements Bluetoo
      * 重新连接蓝牙
      */
     public void reconnect(View view){
-//        if(device == null){
-//            openBlueTooth();
-//            searchBlueTooth();
-//        }
+        if(!mBluetoothAdapter.isEnabled()){
+
+            //请求打开蓝牙
+            openBlueTooth();
+
+        }
+
+        //请求服务器锁的信息
+        requestBluetooth();
     }
 
     //dialog动画

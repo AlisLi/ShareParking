@@ -79,9 +79,7 @@ public class RegisterParkingActivity extends AppCompatActivity{
                         String msg = handleMessageResponse(response);
                         if(msg != null){
                             if("success".equals(msg)){
-                                //车位注册成功,返回我的车位界面
-                                Intent intent = new Intent(RegisterParkingActivity.this,ParkingActivity.class);
-                                startActivity(intent);
+                                onBackPressed();
                             }
                             //提示信息
                             Toast.makeText(RegisterParkingActivity.this,msg,

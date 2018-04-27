@@ -42,6 +42,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
             btName = intent.getStringExtra("bluetoothName");
             btAddress = intent.getStringExtra("bluetoothMAC");
             pin = intent.getStringExtra("pin");
+            Log.d(TAG,btName);
         }else{
             //获取设备
             device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
@@ -108,6 +109,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
             }
         }
 
+        Log.d(TAG,"Receiver结束");
     }
 
     public interface BluetoothReceiverMessage{

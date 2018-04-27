@@ -16,7 +16,7 @@ public class User {
     }
 
     public User(String userName, String phoneNumber, String password, double userMoney) {
-        this.userId = userId;
+        this.userName = userName;
         this.phoneNumber = phoneNumber;
         this.password = password;
         this.userMoney = userMoney;

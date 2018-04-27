@@ -101,6 +101,12 @@ public class ParkingActivity extends AppCompatActivity implements LockAdapter.Pu
             }
         });
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
         /**
          * 设置刷新
          * activity重新显示或首次进入后，请求车位信息
@@ -110,13 +116,6 @@ public class ParkingActivity extends AppCompatActivity implements LockAdapter.Pu
 
         //发起请求
         requestLockMessage();
-
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
     }
 
     /**

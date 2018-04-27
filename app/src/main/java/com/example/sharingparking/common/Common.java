@@ -7,7 +7,7 @@ package com.example.sharingparking.common;
 public class Common {
 
     //访问服务器的url前置部分
-//   public static final String NET_URL_HEADER = "http://192.168.1.107:8080/sharepark/";
+//   public static final String NET_URL_HEADER = "http://192.168.43.53:8080/sharepark/";
    public static final String NET_URL_HEADER = "https://superrocket.cn/sharepark/";
 
     public static final String TAG_SHOW = "lzg";
@@ -53,6 +53,7 @@ public class Common {
     public static final String LOCK_REQUEST_ERROR = "车位锁信息获取异常";
     public static final String LOCK_REQUEST_FAIL = "车位锁信息获取失败";
 
+
     /**
      * 车位发布信息
      */
@@ -60,6 +61,10 @@ public class Common {
     public static final String LOCK_PUBLISH_FAIL = "车位锁发布信息失败";
     public static final String LOCK_PUBLISH_SUCCESS = "车位锁发布信息成功";
     public static final String PARKING_PRICE_INPUT_ERROR = "车位价格输入错误";
+    public static final String LOCK_PUBLISH_REQUEST_ERROR = "车位锁发布信息获取异常";
+    public static final String LOCK_PUBLISH_REQUEST_FAIL = "车位锁发布信息获取失败";
+    public static final String LOCK_PUBLISH_CANCEL_ERROR = "车位锁发布信息取消异常";
+    public static final String LOCK_PUBLISH_CANCEL_FAIL = "车位锁发布信息取消失败";
 
     /**
      * 输入信息异常

@@ -4,11 +4,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.EditText;
-import android.widget.RadioButton;
 
+import com.alibaba.fastjson.JSON;
 import com.example.sharingparking.R;
 import com.example.sharingparking.entity.Publish;
-import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -36,8 +35,6 @@ public class PublishActivity extends SetTimeActivity {
 
     private int userId;
     private int lockId;
-    private RadioButton btnTimeDividable;
-    private RadioButton btnTimeNotDividable;
     private EditText etParkingPrice;
 
     //重写保存时间
@@ -58,25 +55,28 @@ public class PublishActivity extends SetTimeActivity {
 
     private void requestPublish() {
         Publish publish = new Publish();
-        publish.setLock(lockId);
-        publish.setUser(userId);
-        publish.setPublishStartTime(txtStartTime.getText().toString());
-        publish.setPublishEndTime(txtEndTime.getText().toString());
+
+        publish.setLockId(lockId);
+        publish.setUserId(userId);
+        publish.setPublishStartTime(startTime);
+        publish.setPublishEndTime(endTime);
         publish.setParkingMoney(Double.parseDouble(etParkingPrice.getText().toString()));
-        publish.setWay(getPublishStyle());
+        publish.setWay(1);
+
+        Log.d(TAG,JSON.toJSONString(publish));
 
         OkHttpUtils
                 .postString()
                 .url(NET_URL_HEADER + "publish/dopublish")
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
-                .content(new Gson().toJson(publish))
+                .content(JSON.toJSONString(publish))
                 .build()
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         toast(PublishActivity.this,LOCK_PUBLISH_ERROR);
+                        e.printStackTrace();
                     }
-
                     @Override
                     public void onResponse(String response, int id) {
                         Log.d(TAG, response);
@@ -97,8 +97,7 @@ public class PublishActivity extends SetTimeActivity {
 
     private boolean isEmpty() {
         if("点击按钮设置开始时间".equals(txtStartTime.getText().toString()) ||
-                "点击按钮设置截止时间".equals(txtEndTime.getText().toString())
-                || getPublishStyle() == 0){
+                "点击按钮设置截止时间".equals(txtEndTime.getText().toString())){
             return true;
         }
         return false;
@@ -118,24 +117,7 @@ public class PublishActivity extends SetTimeActivity {
         userId = getIntent().getIntExtra("userId",0);
         lockId = getIntent().getIntExtra("lockId",0);
 
-        btnTimeDividable = (RadioButton) findViewById(R.id.rbt_time_dividable);
-        btnTimeNotDividable = (RadioButton) findViewById(R.id.rbt_time_not_dividable);
         etParkingPrice = (EditText) findViewById(R.id.et_parking_price);
-    }
-
-    //返回选择发布时间方式的值
-    private int getPublishStyle(){
-
-        if(btnTimeDividable.isChecked()){
-            //可分割
-            return 1;
-        }else if(btnTimeNotDividable.isChecked()){
-            //不可分割
-            return 2;
-        }else {
-            //没选择
-            return 0;
-        }
     }
 
 }

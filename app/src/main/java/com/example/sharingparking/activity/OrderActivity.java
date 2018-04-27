@@ -16,7 +16,7 @@ public class OrderActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_orderhistory);
+        setContentView(R.layout.activity_ordering);
 
         //添加活动到ActivityList中(安全退出)
         SysApplication.getInstance().addActivity(this);

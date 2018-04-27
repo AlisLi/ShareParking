@@ -95,13 +95,6 @@ public class LockAdapter extends RecyclerView.Adapter<LockAdapter.ViewHolder>{
                 mPublishInterface.controlMyParking(parking.getLockId(),parking.getBlueToothId());
             }
         });
-        /**
-         * 判断发布状态
-         * 若为：未发布，则隐藏租用等信息
-         * 若为：已发布，则显示发布信息,按钮变为取消发布
-         * 若为：已租用，则显示租用者信息,按钮变为取消发布
-         */
-
 
     }
 

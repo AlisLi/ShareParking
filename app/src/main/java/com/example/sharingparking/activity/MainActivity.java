@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity{
     //跳转到我的钱包
     public void showWallet(View view){
         Intent intent = new Intent(this,WalletActivity.class);
-        intent.putExtra("title_text",R.string.my_wallet);
+        intent.putExtra("title_text",getResources().getText(R.string.my_wallet));
         intent.putExtra("userId",userId);
         startActivity(intent);
 
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity{
     //跳转到我的订单
     public void showOrder(View view){
         Intent intent = new Intent(this,OrderActivity.class);
-        intent.putExtra("title_text",R.string.ordering_parking);
+        intent.putExtra("title_text",getResources().getText(R.string.ordering_parking));
         intent.putExtra("userId",userId);
         startActivity(intent);
     }
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity{
     //跳转到我的优惠
     public void showBenefit(View view){
         Intent intent = new Intent(this,BenefitActivity.class);
-        intent.putExtra("title_text",R.string.my_benifit);
+        intent.putExtra("title_text",getResources().getText(R.string.my_benifit));
         intent.putExtra("userId",userId);
         startActivity(intent);
     }
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity{
     //跳转到设置
     public void showSetting(View view){
         Intent intent = new Intent(this,SettingActivity.class);
-        intent.putExtra("title_text",R.string.setting);
+        intent.putExtra("title_text",getResources().getText(R.string.setting));
         intent.putExtra("userId",userId);
         startActivity(intent);
     }
@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity{
     //从主界面跳转到租用详情
     public void toRentMessage(View view){
         Intent intent = new Intent(this,RentMessageActivity.class);
-        intent.putExtra("title_text",R.string.rent_parking_message);
+        intent.putExtra("title_text",getResources().getText(R.string.rent_parking_message));
         intent.putExtra("userId",userId);
         startActivity(intent);
     }
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity{
     //从主界面跳转到发布详情
     public void toPublishParking(View view){
         Intent intent = new Intent(this,PublishedActivity.class);
-        intent.putExtra("title_text",R.string.publish_parking_message);
+        intent.putExtra("title_text",getResources().getText(R.string.publish_parking_message));
         intent.putExtra("userId",userId);
         startActivity(intent);
     }
@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity{
     //从主界面跳转到预定车位
     public void toOrderingParking(View view){
         Intent intent = new Intent(this, MapActivity.class);
-        intent.putExtra("title_text",R.string.ordering_parking);
+        intent.putExtra("title_text",getResources().getText(R.string.ordering_parking));
         intent.putExtra("userId",userId);
         startActivity(intent);
     }

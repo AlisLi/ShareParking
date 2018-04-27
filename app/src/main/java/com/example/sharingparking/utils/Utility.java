@@ -3,6 +3,7 @@ package com.example.sharingparking.utils;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.alibaba.fastjson.JSON;
 import com.example.sharingparking.entity.BlueTooth;
 import com.example.sharingparking.entity.ParkingLock;
 import com.example.sharingparking.entity.Publish;
@@ -13,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -105,6 +107,7 @@ public class Utility {
      * @return
      */
     public static List<ParkingLock> handleLockResponse(String response){
+
         if(!TextUtils.isEmpty(response)){
             try {
                 List<ParkingLock> list = new ArrayList<>();
@@ -157,20 +160,23 @@ public class Utility {
      */
     public static List<Publish> handlePublishResponse(String response){
         if(!TextUtils.isEmpty(response)){
-            try {
+            try{
+                List<com.example.sharingparking.entity.tempBean.Publish> tempList = JSON.
+                        parseArray(response, com.example.sharingparking.entity.tempBean.Publish.class);
+
                 List<Publish> list = new ArrayList<>();
-                JSONArray jsonArray = new JSONArray(response);
-                for(int i = 0;i < jsonArray.length();i++){
-                    JSONObject publishJSONObject = jsonArray.getJSONObject(i);
-                    Publish publish = getPublishJson(publishJSONObject);
+                for(int i = 0;i < tempList.size();i++){
+                    Publish publish = getPublishJson(tempList.get(i));
+
                     list.add(publish);
                 }
                 return list;
-
-            } catch (JSONException e) {
+            }catch (Exception e){
                 e.printStackTrace();
                 return null;
             }
+
+
         }
         return null;
     }
@@ -182,11 +188,17 @@ public class Utility {
      */
     public static Publish handlePublishObjectResponse(String response){
         if(!TextUtils.isEmpty(response)){
+            try {
+                com.example.sharingparking.entity.tempBean.Publish tempPublish =
+                        JSON.parseObject(response, com.example.sharingparking.entity.tempBean.Publish.class);
+                Publish publish = getPublishJson(tempPublish);
 
-            JSONObject publishJSONObject = new JSONObject();
-            Publish publish = getPublishJson(publishJSONObject);
+                return publish;
+            }catch (Exception e){
+                e.printStackTrace();
+                return null;
+            }
 
-            return publish;
         }
 
         return null;
@@ -194,28 +206,29 @@ public class Utility {
 
     /**
      * 获取车位锁发布json数据
-     * @param publishJSONObject
+     * @param
      * @return
      */
-    private static Publish getPublishJson(JSONObject publishJSONObject) {
-        try {
-            Publish publish = new Publish();
+    private static Publish getPublishJson(com.example.sharingparking.entity.tempBean.Publish tempPublish) {
+        Publish publish = new Publish();
+        publish.setUserId(tempPublish.getUser().getUserId());
+        publish.setLockId(tempPublish.getLock().getLockId());
+        publish.setParkingMoney(tempPublish.getParkingMoney());
+        publish.setPublishStartTime(tempPublish.getPublishStartTime());
+        publish.setPublishEndTime(tempPublish.getPublishEndTime());
+        publish.setPublishId(tempPublish.getPublishId());
+        publish.setPublishState(tempPublish.getPublishState());
 
-            publish.setPublishId(handleInteger(publishJSONObject,"publishId"));
-            publish.setLock(handleInteger(publishJSONObject,"lockId"));
-            publish.setPublishStartTime(publishJSONObject.getString("startTime"));
-            publish.setPublishEndTime(publishJSONObject.getString("endTime"));
-            publish.setParkingMoney(publishJSONObject.getDouble("parkingMoney"));
-            publish.setPublishState(handleInteger(publishJSONObject,"publishState"));
-            publish.setWay(handleInteger(publishJSONObject,"way"));
-            publish.setUser(handleInteger(publishJSONObject,"userId"));
+        return publish;
+    }
 
-            return publish;
+    /**
+     * 解析日期
+     */
+    private static Date handleDate(String dateString) {
+        Date date = new Date(Long.valueOf(dateString));
 
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return date;
     }
 
     /**
@@ -261,6 +274,12 @@ public class Utility {
         return null;
     }
 
+    /**
+     * 处理Integer数据
+     * @param jsonObject
+     * @param key
+     * @return
+     */
     private static Integer handleInteger(JSONObject jsonObject,String key){
 
         try {

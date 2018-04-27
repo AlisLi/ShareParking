@@ -26,7 +26,67 @@
                 android:textSize="16sp"/>
 
             <TextView
-                android:id="@+id/txt_lock_no"
+                android:id="@+id/txt_parking_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/start_time"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/txt_publish_start_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/end_time"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/txt_publish_end_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/parking_price"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/txt_publish_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"/>
@@ -46,32 +106,11 @@
                 android:textSize="16sp"/>
 
             <TextView
-                android:id="@+id/txt_lock_address"
+                android:id="@+id/txt_parking_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="queryAddress"
                 android:autoLink="all"
                 android:textColor="@color/cornflowerblue"
-                android:textSize="16sp"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/parking_detail_address"
-                android:textSize="16sp"/>
-
-            <TextView
-                android:id="@+id/txt_parking_detail_address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:textSize="16sp"/>
 
         </LinearLayout>
@@ -84,27 +123,17 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btn_control_my_parking"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/control"
-                android:textSize="14sp"/>
-
-            <Button
-                android:id="@+id/btn_publish"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/publish_parking"
-                android:textSize="14sp"/>
-
-            <Button
+                android:id="@+id/btn_ordering_parking"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:text="@string/delete"
+                android:onClick="ordeingParking"
+                android:text="@string/ordering_parking"
                 android:textSize="14sp"/>
 
         </LinearLayout>
+
+
 
 
     </LinearLayout>
