@@ -45,11 +45,12 @@ public class ControlParkingByNetActivity extends AppCompatActivity {
     public void up(View view){
         //发送‘1#’控制上升
         Log.d(TAG,"上升！");
+        Log.d(TAG,"{\"msg\":"+ "\"" + lockId + "1#\"}");
         OkHttpUtils
                 .postString()
                 .url(NET_URL_HEADER + "user/temp")
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
-                .content("{\"msg\":" + lockId + "\"1#\"" + "}")
+                .content("{\"msg\":"+ "\"" + lockId + "1#\"}")
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -79,7 +80,7 @@ public class ControlParkingByNetActivity extends AppCompatActivity {
                 .postString()
                 .url(NET_URL_HEADER + "user/temp")
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
-                .content("{\"msg\":" + lockId + "\"0#\"" + "}")
+                .content("{\"msg\":"+ "\"" + lockId + "0#\"}")
                 .build()
                 .execute(new StringCallback() {
                     @Override

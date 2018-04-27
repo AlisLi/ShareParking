@@ -60,22 +60,22 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.InjectView;
 import butterknife.OnClick;
 
 public class MapActivity extends AppCompatActivity implements BaiduMap.OnMarkerClickListener,
         BaiduMap.OnMapClickListener, BaiduMap.OnMapStatusChangeListener {
 
-    @BindView(R.id.mMapView)
+    @InjectView(R.id.mMapView)
     MapView mMapView;
-    @BindView(R.id.fab)
+    @InjectView(R.id.fab)
     FloatingActionButton fab;
 
     private static final String TAG = "MapActivity";
-    @BindView(R.id.dh)
+    @InjectView(R.id.dh)
     FloatingActionButton dh;
-    @BindView(R.id.mn)
+    @InjectView(R.id.mn)
     FloatingActionButton mn;
 
    // private AlertDialog dialog;
@@ -129,7 +129,7 @@ public class MapActivity extends AppCompatActivity implements BaiduMap.OnMarkerC
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         SDKInitializer.initialize(getApplicationContext());
         setContentView(R.layout.activity_map);
-        ButterKnife.bind(this);
+        ButterKnife.inject(this);
         initView();
         initMarker();
         initLocation();

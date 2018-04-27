@@ -31,6 +31,10 @@ public class PublishedAdapter extends RecyclerView.Adapter<PublishedAdapter.View
 
     private List<Publish> mPublishes;
 
+    private Integer publishState;
+
+
+
     static class ViewHolder extends RecyclerView.ViewHolder{
         CardView cardView;
         TextView txtPublishNo;
@@ -52,13 +56,17 @@ public class PublishedAdapter extends RecyclerView.Adapter<PublishedAdapter.View
             txtPublishState = (TextView) view.findViewById(R.id.txt_publish_state);
             btnCancelPublish = (Button) view.findViewById(R.id.btn_cancel_publish);
 
-
         }
     }
 
 
     public PublishedAdapter(List<Publish> publishes){
         this.mPublishes = publishes;
+    }
+
+    public PublishedAdapter(List<Publish> publishes,Integer publishState){
+        this.mPublishes = publishes;
+        this.publishState = publishState;
     }
 
     @Override
@@ -81,7 +89,12 @@ public class PublishedAdapter extends RecyclerView.Adapter<PublishedAdapter.View
         holder.txtStartTime.setText(dateToFormDate(publish.getPublishStartTime()));
         holder.txtEndTime.setText(dateToFormDate(publish.getPublishEndTime()));
         holder.txtParkingPrice.setText(publish.getParkingMoney() + "");
-        holder.txtPublishState.setText(publish.getPublishState() + "");
+
+        if(publishState != 1){
+            holder.btnCancelPublish.setVisibility(View.GONE);
+        }
+
+        holder.txtPublishState.setText(handlePublishState(publish.getPublishState()));
         holder.btnCancelPublish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,4 +120,16 @@ public class PublishedAdapter extends RecyclerView.Adapter<PublishedAdapter.View
         this.mPublishedInterface = publishedInterface;
 
     }
+
+    //处理发布状态
+    private String handlePublishState(Integer stateNumber){
+        if(stateNumber == 1){
+            return "正在发布";
+        }else if(stateNumber == 2){
+            return "发布超时";
+        }else {
+            return "已取消";
+        }
+    }
+
 }
