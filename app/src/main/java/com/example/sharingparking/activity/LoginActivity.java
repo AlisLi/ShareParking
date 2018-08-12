@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
-import android.transition.Explode;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -139,16 +138,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.btn_login:
                 //explode: 转场特效
-                Explode explode = new Explode();
-                explode.setDuration(500);
-
-                getWindow().setExitTransition(explode);
-                getWindow().setEnterTransition(explode);
+//                Explode explode = new Explode();
+//                explode.setDuration(500);
+//
+//                getWindow().setExitTransition(explode);
+//                getWindow().setEnterTransition(explode);
                 ActivityOptionsCompat aoc = ActivityOptionsCompat.makeSceneTransitionAnimation(this);
 
                 //临时加入
-//                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-//                startActivity(intent);
+                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                startActivity(intent);
 
                 //获取输入框中的手机号和密码
                 this.phoneNumber = etLoginUserPhoneNumber.getText().toString();

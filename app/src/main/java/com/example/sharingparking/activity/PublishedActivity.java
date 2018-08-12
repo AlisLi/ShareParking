@@ -28,7 +28,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.BindView;
 import okhttp3.Call;
 import okhttp3.MediaType;
 
@@ -64,7 +64,7 @@ public class PublishedActivity extends AppCompatActivity implements PublishedAda
     /**
      * 筛选框
      */
-    @InjectView(R.id.dropDownMenu)
+    @BindView(R.id.dropDownMenu)
     DropDownMenu mDropDownMenu;
     //筛选框
     private List<View> popupViews = new ArrayList<>();
@@ -80,7 +80,7 @@ public class PublishedActivity extends AppCompatActivity implements PublishedAda
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_published);
+        setContentView(R.layout.activity_main_common);
 
         //添加活动到ActivityList中
         SysApplication.getInstance().addActivity(this);
@@ -88,7 +88,7 @@ public class PublishedActivity extends AppCompatActivity implements PublishedAda
         //从intent中获取数据
         userId = getIntent().getIntExtra("userId",0);
 
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         init();
 
     }
@@ -194,6 +194,10 @@ public class PublishedActivity extends AppCompatActivity implements PublishedAda
                                 mPublishList.addAll(publishList);
                                 mPublishAdapter = new PublishedAdapter(publishList,
                                         publishStateNumber[PUBLISH_STATE_POSITION]);
+
+                                //设置按钮点击事件接口监听
+                                mPublishAdapter.setPublishedInterface(PublishedActivity.this);
+
                                 mRecyclerView.setAdapter(mPublishAdapter);
 
                             }else if(handleMessageResponse(response) != null){
@@ -201,6 +205,10 @@ public class PublishedActivity extends AppCompatActivity implements PublishedAda
                                     mPublishList.clear();
                                     mPublishAdapter = new PublishedAdapter(mPublishList,
                                             publishStateNumber[PUBLISH_STATE_POSITION]);
+
+                                    //设置按钮点击事件接口监听
+                                    mPublishAdapter.setPublishedInterface(PublishedActivity.this);
+
                                     mRecyclerView.setAdapter(mPublishAdapter);
                                 }
                                 //提示错误信息
@@ -310,7 +318,7 @@ public class PublishedActivity extends AppCompatActivity implements PublishedAda
                             if("success".equals(msg)){
                                 //取消成功，刷新列表
                                 mSwipeRefreshLayout.setRefreshing(true);
-                                requestPublishMessage();
+                                requestByStatePublished(publishStateNumber[PUBLISH_STATE_POSITION]);
                             }else {
                                 //提示错误信息
                                 Toast.makeText(PublishedActivity.this,handleMessageResponse(response),

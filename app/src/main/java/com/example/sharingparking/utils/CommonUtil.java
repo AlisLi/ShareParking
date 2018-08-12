@@ -1,8 +1,11 @@
 package com.example.sharingparking.utils;
 
 import android.content.Context;
+import android.os.Handler;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.zyao89.view.zloading.ZLoadingDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -91,5 +94,43 @@ public class CommonUtil {
         SimpleDateFormat mFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         return mFormatter.format(date);
     }
+
+    //设置1秒后，取消dialog显示
+    public static void cancelSecondDialog(ZLoadingDialog dialog){
+        new Handler().postDelayed(new Runnable(){
+            public void run() {
+                dialog.cancel();
+            }
+        }, 1000);
+    }
+
+    /**
+     * 计算两个日期的时间差
+     * @param start
+     * @param end
+     * @return
+     */
+    public static long calculateTimeDifference(Date start,Date end) {
+
+        long nd = 1000 * 24 * 60 * 60;
+        long nh = 1000 * 60 * 60;
+
+        try{
+            long startLong = start.getTime();
+            long endLong = end.getTime();
+
+            // 计算差多少小时
+            long hour = (endLong - startLong) % nd / nh;
+
+            return hour;
+        }catch (Exception e){
+            e.printStackTrace();
+            return -1;
+        }
+
+
+    }
+
+
 
 }

@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.example.sharingparking.entity.BlueTooth;
+import com.example.sharingparking.entity.Ordering;
 import com.example.sharingparking.entity.ParkingLock;
 import com.example.sharingparking.entity.Publish;
 import com.example.sharingparking.entity.User;
@@ -175,8 +176,6 @@ public class Utility {
                 e.printStackTrace();
                 return null;
             }
-
-
         }
         return null;
     }
@@ -218,9 +217,115 @@ public class Utility {
         publish.setPublishEndTime(tempPublish.getPublishEndTime());
         publish.setPublishId(tempPublish.getPublishId());
         publish.setPublishState(tempPublish.getPublishState());
-
+        User user  = new User();
+        user.setUserId(tempPublish.getUser().getUserId());
+        user.setUserName(tempPublish.getUser().getUserName());
+        user.setPhoneNumber(tempPublish.getUser().getPhoneNumber());
+        publish.setUser(user);
+        ParkingLock parkingLock = new ParkingLock();
+        parkingLock.setLockId(tempPublish.getLock().getLockId());
+        parkingLock.setAddress(tempPublish.getLock().getAddress());
+        parkingLock.setLockState(tempPublish.getLock().getLockState());
+        publish.setLock(parkingLock);
         return publish;
     }
+
+    public static List<Ordering> handleListOrderResponse(String response){
+
+        if(!TextUtils.isEmpty(response)){
+            try{
+                List<com.example.sharingparking.entity.tempBean.Ordering> tempList = JSON.
+                        parseArray(response,com.example.sharingparking.entity.tempBean.Ordering.class);
+
+                List<Ordering> list = new ArrayList<>();
+
+                for(int i = 0;i < tempList.size();i++){
+                    Ordering  ordering = getOrderingJson(tempList.get(i));
+                    list.add(ordering);
+                }
+
+                return list;
+            }catch (Exception e){
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        return  null;
+    }
+
+    public static List<Ordering> handleOrderResponse(String response){
+
+        if(!TextUtils.isEmpty(response)){
+            try{
+                com.example.sharingparking.entity.tempBean.Ordering tempList = JSON.
+                        parseObject(response,com.example.sharingparking.entity.tempBean.Ordering.class);
+
+                List<Ordering> list = new ArrayList<>();
+
+                Ordering  ordering = getOrderingJson(tempList);
+
+                list.add(ordering);
+
+                return list;
+            }catch (Exception e){
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        return  null;
+    }
+
+    /**
+     * 获取车位锁预定json数据
+     * @param
+     * @return
+     */
+    private static Ordering getOrderingJson(com.example.sharingparking.entity.tempBean.Ordering tempOrdering) {
+        Ordering ordering = new Ordering();
+
+        Publish publish = new Publish();
+        ParkingLock parkingLock = new ParkingLock();
+        parkingLock.setLockId(tempOrdering.getLock().getLockId());
+        parkingLock.setAddress(tempOrdering.getLock().getAddress());
+        parkingLock.setLockState(tempOrdering.getLock().getLockState());
+        parkingLock.setBlueToothId(tempOrdering.getLock().getBlueToothId());
+
+        User parkingUser = new User();
+        parkingUser.setUserId(tempOrdering.getLock().getUserId());
+
+        parkingLock.setUser(parkingUser);
+        publish.setLock(parkingLock);
+        ordering.setPublish(publish);
+
+        User user  = new User();
+        user.setUserId(tempOrdering.getUser().getUserId());
+        user.setUserName(tempOrdering.getUser().getUserName());
+        user.setPhoneNumber(tempOrdering.getUser().getPhoneNumber());
+        ordering.setUser(user);
+        ordering.setStartTime(tempOrdering.getStartTime());
+        ordering.setEndTime(tempOrdering.getEndTime());
+        ordering.setExpense(tempOrdering.getExpense());
+        ordering.setOrderingState(tempOrdering.getOrderingState());
+        ordering.setOrderingId(tempOrdering.getOrderingId());
+
+        return ordering;
+    }
+
+    public static boolean handlePay(String response){
+        try {
+            Double pay = Double.parseDouble(handleMessageResponse(response));
+
+            return true;
+        }catch (Exception e){
+
+            return false;
+
+        }
+
+    }
+
 
     /**
      * 解析日期

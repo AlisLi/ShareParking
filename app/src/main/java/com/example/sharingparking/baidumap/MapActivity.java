@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -15,6 +17,7 @@ import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
@@ -44,6 +47,9 @@ import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.model.inner.GeoPoint;
+import com.baidu.mapapi.search.core.SearchResult;
+import com.baidu.mapapi.search.geocode.GeoCodeOption;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.GeoCoder;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
@@ -54,29 +60,50 @@ import com.baidu.navisdk.adapter.BNRoutePlanNode;
 import com.baidu.navisdk.adapter.BNaviSettingManager;
 import com.baidu.navisdk.adapter.BaiduNaviManager;
 import com.example.sharingparking.R;
+import com.example.sharingparking.entity.Publish;
+import com.example.sharingparking.utils.CommonUtil;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 
 public class MapActivity extends AppCompatActivity implements BaiduMap.OnMarkerClickListener,
-        BaiduMap.OnMapClickListener, BaiduMap.OnMapStatusChangeListener {
+        BaiduMap.OnMapClickListener, BaiduMap.OnMapStatusChangeListener, OnGetGeoCoderResultListener {
 
-    @InjectView(R.id.mMapView)
+    @BindView(R.id.mMapView)
     MapView mMapView;
-    @InjectView(R.id.fab)
+    @BindView(R.id.fab)
     FloatingActionButton fab;
 
     private static final String TAG = "MapActivity";
-    @InjectView(R.id.dh)
+    @BindView(R.id.dh)
     FloatingActionButton dh;
-    @InjectView(R.id.mn)
+    @BindView(R.id.mn)
     FloatingActionButton mn;
+
+    /*@BindView(R.id.detail_address)
+    EditText editDetailAddress; //搜索框中的地址
+    *//* @BindView(R.id.geocodekey)
+     EditText editGeoCodeKey;*//*
+    @BindView(R.id.lat)
+    EditText lat;
+    @BindView(R.id.lon)
+    EditText lon;
+    @BindView(R.id.geocode)
+    Button searchAddress;
+    @BindView(R.id.reversegeocode)
+    Button reversegeocode;
+*/
+    GeoCoder mSearch = null;  //搜索模块
+    String detail_address = "";   //要搜索的地址
+    GeoCodeOption mOption;
 
    // private AlertDialog dialog;
     private BaiduMap mBaiduMap;
@@ -107,8 +134,23 @@ public class MapActivity extends AppCompatActivity implements BaiduMap.OnMarkerC
     //隐藏时的动画
     private TranslateAnimation hideAction;
 
+    MarkerOptions options;
+
     //当前选择的经纬度
     private LatLng currentLatLng = null;
+
+    protected Publish mPublish;   //车位发布
+    protected String userName;        //车主用户名
+    protected String parking_price;  //车位价格
+    protected String parking_address; //车位地址
+
+    protected List<Publish> mPublishList = new ArrayList<>();  //车位发布列表
+
+    protected double address2Latitude; // 通过地址得到的经纬度
+    protected double address2Longitude;
+
+    protected List<MapCar> infos;  //车位信息列表
+
 
     //相关权限
     private static final String[] authBaseArr = {Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -129,17 +171,48 @@ public class MapActivity extends AppCompatActivity implements BaiduMap.OnMarkerC
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         SDKInitializer.initialize(getApplicationContext());
         setContentView(R.layout.activity_map);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         initView();
-        initMarker();
-        initLocation();
 
+        initLocation();
 
         if (initDirs()) {
             initNavigatin();
         }
 
+        //得到车位发布列表
+        mPublishList = (List<Publish>) getIntent().getSerializableExtra("publishList");
+       /* for (int i = 0; i < mPublishList.size(); i++) {
+           userName = mPublishList.get(i).getUser().getUserName();
+           parking_price = "" + mPublishList.get(i).getParkingMoney();
+           parking_address = mPublishList.get(i).getLock().getAddress();
+
+        }
+        String[] address = CommonUtil.splitParkingAddress(parking_address);
+        parking_address = address[0];*/
+
+        mPublish = (Publish) getIntent().getSerializableExtra("positionPublish");
+        userName = mPublish.getUser().getUserName();
+        parking_price = "" + mPublish.getParkingMoney();
+        parking_address = CommonUtil.splitParkingAddress(mPublish.getLock().getAddress())[0];
+
+        initMarker();
+        setMarkerInfo();
     }
+
+    //添加覆盖物信息
+    protected void setMarkerInfo() {
+        infos = new ArrayList<>();
+        for(int i = 0;i < mPublishList.size();i++) {
+            MapCar mapCar = new MapCar();
+            mapCar.setUserName(mPublishList.get(i).getUser().getUserName());
+            mapCar.setParkingPrice("" + mPublishList.get(i).getParkingMoney());
+            mapCar.setParkingAddress(mPublishList.get(i).getLock().getAddress());
+            infos.add(mapCar);
+        }
+    }
+
+
 
     String authinfo = null;
 
@@ -295,6 +368,33 @@ public class MapActivity extends AppCompatActivity implements BaiduMap.OnMarkerC
         return true;
     }
 
+    /**
+     * 发起搜索
+     *
+     * @param 
+     */
+
+   /* public void searchButtonProcess(View v) {
+        if (v.getId() == R.id.reversegeocode) {
+            LatLng ptCenter = new LatLng((Float.valueOf(lat.getText()
+                    .toString())), (Float.valueOf(lon.getText().toString())));
+            // 反Geo搜索
+            mSearch.reverseGeoCode(new ReverseGeoCodeOption()
+                    .location(ptCenter));
+        } else if (v.getId() == R.id.geocode) {
+            //editDetailAddress = (EditText) findViewById(R.id.detail_address);
+           // EditText editGeoCodeKey = (EditText) findViewById(R.id.geocodekey);
+            // Geo搜索
+            editDetailAddress.setText(parking_address);
+            detail_address = editDetailAddress.getText().toString();
+           // mOption = new GeoCodeOption().address(detail_address);
+            mSearch.geocode(new GeoCodeOption().address(detail_address));
+           // mSearch.geocode(new GeoCodeOption().city(
+                    //editDetailAddress.getText().toString()).address(editGeoCodeKey.getText().toString()));
+        }
+    }
+*/
+
 
     private void routeplanToNavi(LatLng currentLatLng, boolean isSimulation) {
         BNRoutePlanNode.CoordinateType mCoordinateType = BNRoutePlanNode.CoordinateType.BD09LL;
@@ -333,6 +433,48 @@ public class MapActivity extends AppCompatActivity implements BaiduMap.OnMarkerC
             //开始导航
             BaiduNaviManager.getInstance().launchNavigator(this, list, 1, isSimulation, new DemoRoutePlanListener(sNode));
         }
+    }
+
+    /**
+     * Geo搜索
+     */
+    @SuppressLint("DefaultLocale")
+    @Override
+    public void onGetGeoCodeResult(GeoCodeResult result) {
+        if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
+            Toast.makeText(MapActivity.this, "抱歉，未能找到结果", Toast.LENGTH_LONG)
+                    .show();
+            return;
+        }
+        mBaiduMap.clear();
+        mBaiduMap.addOverlay(new MarkerOptions().position(result.getLocation())
+                .icon(BitmapDescriptorFactory
+                        .fromResource(R.mipmap.placeholder)));
+        mBaiduMap.setMapStatus(MapStatusUpdateFactory.newLatLng(result
+                .getLocation()));
+        String strInfo = String.format("纬度：%f 经度：%f",
+                result.getLocation().latitude, result.getLocation().longitude);
+        Toast.makeText(MapActivity.this, strInfo, Toast.LENGTH_LONG).show();
+    }
+
+    /**
+     * 反Geo搜索
+     */
+    @Override
+    public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
+        if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
+            Toast.makeText(MapActivity.this, "抱歉，未能找到结果", Toast.LENGTH_LONG)
+                    .show();
+            return;
+        }
+        mBaiduMap.clear();
+        mBaiduMap.addOverlay(new MarkerOptions().position(result.getLocation())
+                .icon(BitmapDescriptorFactory
+                        .fromResource(R.mipmap.placeholder)));
+        mBaiduMap.setMapStatus(MapStatusUpdateFactory.newLatLng(result
+                .getLocation()));
+        Toast.makeText(MapActivity.this, result.getAddress(),
+                Toast.LENGTH_LONG).show();
     }
 
 
@@ -386,6 +528,16 @@ public class MapActivity extends AppCompatActivity implements BaiduMap.OnMarkerC
     private void initMarker() {
         mMarker = BitmapDescriptorFactory.fromResource(R.mipmap.placeholder);
         addOverLays(MapCar.infos);
+        /*mMarker = BitmapDescriptorFactory.fromResource(R.mipmap.placeholder);
+        List<MapCar> list = new ArrayList<>();
+        for(int i = 0;i < mPublishList.size();i++) {
+            MapCar mapCar = new MapCar();
+            mapCar.setUserName(mPublishList.get(i).getUser().getUserName());
+            mapCar.setParkingPrice("" + mPublishList.get(i).getParkingMoney());
+            mapCar.setParkingAddress(mPublishList.get(i).getLock().getAddress());
+            list.add(mapCar);
+        }
+       // addOverLays();*/
     }
 
     private void initView() {
@@ -406,6 +558,10 @@ public class MapActivity extends AppCompatActivity implements BaiduMap.OnMarkerC
         mMapView.showZoomControls(true);
         //是否显示比例尺，默认true
         mMapView.showScaleControl(true);
+
+        // 初始化搜索模块，注册事件监听
+        mSearch = GeoCoder.newInstance();
+        mSearch.setOnGetGeoCodeResultListener(this);
 
         //隐藏百度logo
         View child = mMapView.getChildAt(1);
@@ -456,13 +612,13 @@ public class MapActivity extends AppCompatActivity implements BaiduMap.OnMarkerC
 
     }
 
-   /* @Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
-    @Override
+   /* @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.item_1: //普通地图
@@ -499,6 +655,33 @@ public class MapActivity extends AppCompatActivity implements BaiduMap.OnMarkerC
         return super.onOptionsItemSelected(item);
     }*/
 
+   //通过地址得到经纬度
+    public GeoPoint getGeoPointBystr(String str) {
+        GeoPoint gpGeoPoint = null;
+        if (str!=null) {
+            Geocoder gc = new Geocoder(MapActivity.this, Locale.CHINA);
+            List<Address> addressList = null;
+            try {
+
+                addressList = gc.getFromLocationName(str, 1);
+                if (!addressList.isEmpty()) {
+                    Address address_temp = addressList.get(0);
+                    //计算经纬度
+                    address2Latitude = address_temp.getLatitude() * 1E6;
+                    address2Longitude = address_temp.getLongitude() * 1E6;
+                    System.out.println("纬度：" + address2Latitude);
+                    System.out.println("经度：" + address2Longitude);
+                    //生产GeoPoint
+                    gpGeoPoint = new GeoPoint((int)address2Latitude, (int)address2Longitude);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return gpGeoPoint;
+    }
+
+   //添加图层
     private void addOverLays(List<MapCar> infos) {
         //首先清楚定位的浮层
         mBaiduMap.clear();
@@ -519,6 +702,42 @@ public class MapActivity extends AppCompatActivity implements BaiduMap.OnMarkerC
             marker.setExtraInfo(bundle);
         }
 
+        /*List<MapCar> list = new ArrayList<>();
+        for(int i = 0;i < mPublishList.size();i++) {
+            MapCar mapCar = new MapCar();
+            mapCar.setUserName(mPublishList.get(i).getUser().getUserName());
+            mapCar.setParkingPrice("" + mPublishList.get(i).getParkingMoney());
+            mapCar.setParkingAddress(mPublishList.get(i).getLock().getAddress());
+            list.add(mapCar);
+
+            //经纬度
+            latLng = new LatLng(getGeoPointBystr(mPublishList.get(i).getLock().getAddress()).getLatitudeE6(),
+                    getGeoPointBystr(mPublishList.get(i).getLock().getAddress()).getLongitudeE6());
+            //添加自定义图标
+            options = new MarkerOptions()
+                    .position(latLng)      //设置marker的位置
+                    .icon(mMarker)         //设置marker的图标
+                    .zIndex(5);            //设置marker所在的层级
+            marker = (Marker) mBaiduMap.addOverlay(options);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("carInfo", mapCar);
+            marker.setExtraInfo(bundle);
+        }*/
+
+        /*for (MapCar car : infos) {
+            //经纬度
+            latLng = new LatLng(car.getLatitude(), car.getLongitude());
+            //添加自定义图标
+            options = new MarkerOptions()
+                    .position(latLng) // 设置marker的位置
+                    .icon(mMarker)    // 设置marker的图标
+                    .zIndex(5);       // 设置marker所在的层级
+            marker = (Marker) mBaiduMap.addOverlay(options);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("car", car);
+            marker.setExtraInfo(bundle);
+        }*/
+
         //定位到覆盖物的位置，应该是最后一个覆盖物的位置，如果不想定位到覆盖物的位置而是定位到人的位置，注释掉
         //MapStatusUpdate msu = MapStatusUpdateFactory.newLatLng(latLng);
         //mBaiduMap.setMapStatus(msu);
@@ -536,9 +755,14 @@ public class MapActivity extends AppCompatActivity implements BaiduMap.OnMarkerC
                 routeplanToNavi(currentLatLng, true);
                 break;
             case R.id.mn:
-                routeplanToNavi(currentLatLng, false);
+                confirmRent();
                 break;
         }
+
+    }
+
+    //确定租用
+    public void confirmRent() {
 
     }
 
@@ -599,8 +823,10 @@ public class MapActivity extends AppCompatActivity implements BaiduMap.OnMarkerC
                 TextView infoText = new TextView(getApplicationContext());
                 infoText.setBackgroundResource(R.mipmap.location_tips);
                 infoText.setPadding(30, 20, 30, 30);
-                infoText.setText("经度：" + longitude + '\n' + "纬度：" + latitude + "\n地址：" + markerAddress);
-                System.out.println("..." + markerAddress);
+
+                infoText.setText("车位主：" + userName + "\n车位价格：" + parking_price +
+                        "\n地址：" + parking_address);
+                System.out.println("地址: " + parking_address);
                 // infoText.setText("经度：" + car.getLongitude() + '\n' + "纬度：" + car.getLatitude() + "\n地址：" + markerAddress);
                 // infoText.setText(stringBuffer);
                 infoText.setTextColor(Color.parseColor("#FFFFFF"));

@@ -45,7 +45,8 @@
     <string name="delete">删除</string>
     <string name="parking_no">车位编号：</string>
     <string name="parking_owner">车位主：</string>
-    <string name="rent_time">租用时间：</string>
+    <string name="parking_owner_id">车位主ID：</string>
+    <string name="rent_time">出租时间：</string>
     <string name="parking_owner_phone">联系方式：</string>
     <string name="rent_expense">费用：</string>
     <string name="control">控制</string>
@@ -55,6 +56,9 @@
     <string name="not_connected">蓝牙未连接</string>
     <string name="reconnect">重新连接</string>
     <string name="refreshConnect">重新连接</string>
+    <string name="infrared_state">红外线状态：</string>
+    <string name="led_state">LED灯状态：</string>
+    <string name="battery_state">电池电量：</string>
 
     <!--车位控制-->
     <string name="control_by_net_method">网络控制车位</string>
@@ -86,5 +90,12 @@
     <string name="current_date">当前日期</string>
     <string name="select_time">选择时间</string>
     <string name="current_time">当前时间</string>
+
+    <!-- 我的订单 -->
+    <string name="ordering_detail">订单详情</string>
+    <string name="confirm_rent">确定租用</string>
+    <string name="set_rent_time">设置租用时间</string>
+    <string name="ordering_id">订单编号：</string>
+    <string name="ordering_state">订单状态：</string>
 
 </resources>

@@ -4,14 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.transition.Explode;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.example.sharingparking.R;
 import com.example.sharingparking.SysApplication;
-import com.example.sharingparking.baidumap.MapActivity;
 
 /**
  * Created by Lizhiguo on 2017/10/19.
@@ -34,10 +32,10 @@ public class MainActivity extends AppCompatActivity{
         //添加活动到ActivityList中
         SysApplication.getInstance().addActivity(this);
 
-        Explode explode = new Explode();
-        explode.setDuration(500);
-        getWindow().setExitTransition(explode);
-        getWindow().setEnterTransition(explode);
+//        Explode explode = new Explode();
+//        explode.setDuration(500);
+//        getWindow().setExitTransition(explode);
+//        getWindow().setEnterTransition(explode);
 
         initView();
 
@@ -118,9 +116,12 @@ public class MainActivity extends AppCompatActivity{
 
     //从主界面跳转到预定车位
     public void toOrderingParking(View view){
-        Intent intent = new Intent(this, MapActivity.class);
+        Intent intent = new Intent(this, OrderActivity.class);
         intent.putExtra("title_text",getResources().getText(R.string.ordering_parking));
         intent.putExtra("userId",userId);
+
+//        Intent intent = new Intent(this, MapActivity.class);
+
         startActivity(intent);
     }
 

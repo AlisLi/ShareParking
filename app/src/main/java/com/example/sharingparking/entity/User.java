@@ -1,11 +1,13 @@
 package com.example.sharingparking.entity;
 
+import java.io.Serializable;
+
 /**
  * 用户类
  * Created by Lizhiguo on 2017/11/21.
  */
 
-public class User {
+public class User implements Serializable {
     private Integer userId;     //用户ID
     private String userName;    //用户名
     private String phoneNumber; //手机号

@@ -1,11 +1,13 @@
 package com.example.sharingparking.entity;
 
+import java.io.Serializable;
+
 /**
  * 实体类：锁信息
  * Created by Lizhiguo on 2018/3/15.
  */
 
-public class ParkingLock {
+public class ParkingLock implements Serializable{
     private Integer lockId;     //锁编号
     private Integer userId;     //用户ID
     private Integer blueToothId;    //蓝牙ID
@@ -14,6 +16,7 @@ public class ParkingLock {
     private Integer infrared;   //红外线状态
     private Integer led;        //LED灯状态
     private Integer battery;    //电池状态
+    private User user;//车位锁用户
 
     public ParkingLock() {
     }
@@ -22,6 +25,14 @@ public class ParkingLock {
         this.lockId = lockId;
         this.userId = userId;
         this.address = address;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Integer getLockId() {

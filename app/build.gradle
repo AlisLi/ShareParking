@@ -9,7 +9,7 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.example.sharingparking"
-        minSdkVersion 21
+        minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -31,6 +31,7 @@ repositories {
     flatDir {
         dirs 'libs' //就是你放aar的目录地址
     }
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -54,10 +55,18 @@ dependencies {
     compile 'com.zhy:okhttputils:2.6.2'
     compile 'com.google.code.gson:gson:2.6.2'
     compile 'com.zyao89:zloading:1.0.11'
-//    compile 'com.jakewharton:butterknife:8.4.0'
+    compile 'com.jakewharton:butterknife:8.4.0'
     compile 'com.yanzhenjie.nohttp:okhttp:1.1.1'
     testCompile 'junit:junit:4.12'
+    //    compile 'com.jakewharton:butterknife:6.1.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
     compile files('libs/fastjson-1.2.45.jar')
-    compile 'com.jakewharton:butterknife:6.1.0'
+    compile 'com.github.yilylong:CBDialog:v1.0.6'
+    compile files('lib/BaiduLBS_Android.jar')
+    compile files('lib/BaiduNaviSDK_3.3.0.jar')
+    compile files('lib/fastjson-1.2.45.jar')
+    compile files('lib/MobCommons-2017.0607.1736.jar')
+    compile files('lib/MobTools-2017.0607.1736.jar')
+    compile files('lib/nineoldandroids-2.4.0.jar')
+    compile files('lib/universal-image-loader-1.9.3.jar')
 }

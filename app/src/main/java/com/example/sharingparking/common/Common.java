@@ -7,7 +7,7 @@ package com.example.sharingparking.common;
 public class Common {
 
     //访问服务器的url前置部分
-//   public static final String NET_URL_HEADER = "http://192.168.43.53:8080/sharepark/";
+//   public static final String NET_URL_HEADER = "http://192.168.1.112:8080/sharepark/";
    public static final String NET_URL_HEADER = "https://superrocket.cn/sharepark/";
 
     public static final String TAG_SHOW = "lzg";
@@ -77,5 +77,22 @@ public class Common {
     public static final String BT_REQUEST_ERROR = "蓝牙信息获取异常";
     public static final String BT_REQUEST_FAIL = "蓝牙信息获取失败";
 
+    /**
+     * 预订车位
+     */
+    public static final String LOCK_ORDERING_REQUEST_ERROR = "车位锁预定信息获取异常";
+    public static final String LOCK_ORDERING_REQUEST_FAIL = "车位锁预定信息获取失败";
+
+    /**
+     * 订单信息
+     */
+    public static final String USER_ORDERING_REQUEST_ERROR = "用户订单信息获取异常";
+    public static final String USER_ORDERING_REQUEST_FAIL = "用户订单信息获取失败";
+
+    public static final String USER_ORDERING_PAY_ERROR = "支付异常";
+    public static final String USER_ORDERING_PAY_FAIL = "支付失败";
+    public static final String USER_ORDERING_PAY_SUCCESS = "支付成功";
+
+    public static final String[] ORDERING_STATE = {"","未支付","未到使用时间","订单失效","","","正在使用"};
 
 }

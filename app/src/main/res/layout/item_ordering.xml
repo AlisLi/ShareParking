@@ -22,11 +22,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/parking_no"
+                android:text="@string/parking_owner"
                 android:textSize="16sp"/>
 
             <TextView
-                android:id="@+id/txt_parking_no"
+                android:id="@+id/txt_parking_owner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"/>
@@ -42,11 +42,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/start_time"
+                android:text="@string/parking_owner_phone"
                 android:textSize="16sp"/>
 
             <TextView
-                android:id="@+id/txt_publish_start_time"
+                android:id="@+id/txt_parking_owner_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"/>
@@ -62,11 +62,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/end_time"
+                android:text="@string/rent_time"
                 android:textSize="16sp"/>
 
             <TextView
-                android:id="@+id/txt_publish_end_time"
+                android:id="@+id/txt_rent_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"/>
@@ -86,7 +86,7 @@
                 android:textSize="16sp"/>
 
             <TextView
-                android:id="@+id/txt_publish_price"
+                android:id="@+id/txt_ordering_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"/>
@@ -118,6 +118,26 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/parking_detail_address"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/txt_ordering_parking_detail_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:gravity="end"
             android:orientation="horizontal">
@@ -132,9 +152,6 @@
                 android:textSize="14sp"/>
 
         </LinearLayout>
-
-
-
 
     </LinearLayout>
 

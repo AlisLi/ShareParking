@@ -1,5 +1,6 @@
 package com.example.sharingparking.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -7,7 +8,7 @@ import java.util.Date;
  * Created by Lizhiguo on 2018/3/26.
  */
 
-public class Publish {
+public class Publish implements Serializable{
     private Integer publishId;          //发布编号
     private Date publishStartTime;   //发布开始时间
     private Date publishEndTime;  //发布截止时间
@@ -16,6 +17,8 @@ public class Publish {
     private double parkingMoney;   //车位金额
     private Integer publishState;   //发布状态
     private Integer way;   //发布方式
+    private User user;
+    private ParkingLock lock;
 
     public Integer getPublishId() {
         return publishId;
@@ -79,5 +82,21 @@ public class Publish {
 
     public void setWay(Integer way) {
         this.way = way;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public ParkingLock getLock() {
+        return lock;
+    }
+
+    public void setLock(ParkingLock lock) {
+        this.lock = lock;
     }
 }

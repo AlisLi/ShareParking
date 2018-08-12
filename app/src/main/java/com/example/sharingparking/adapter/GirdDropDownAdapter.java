@@ -15,7 +15,8 @@ import butterknife.ButterKnife;
 import butterknife.BindView;
 
 
-public class ListDropDownAdapter extends BaseAdapter {
+
+public class GirdDropDownAdapter extends BaseAdapter {
 
     private Context context;
     private List<String> list;
@@ -26,7 +27,7 @@ public class ListDropDownAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public ListDropDownAdapter(Context context, List<String> list) {
+    public GirdDropDownAdapter(Context context, List<String> list) {
         this.context = context;
         this.list = list;
     }
@@ -52,7 +53,7 @@ public class ListDropDownAdapter extends BaseAdapter {
         if (convertView != null) {
             viewHolder = (ViewHolder) convertView.getTag();
         } else {
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_default_drop_down, null);
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_list_drop_down, null);
             viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         }
@@ -65,10 +66,10 @@ public class ListDropDownAdapter extends BaseAdapter {
         if (checkItemPosition != -1) {
             if (checkItemPosition == position) {
                 viewHolder.mText.setTextColor(context.getResources().getColor(R.color.drop_down_selected));
-                viewHolder.mText.setBackgroundResource(R.color.check_bg);
+                viewHolder.mText.setCompoundDrawablesWithIntrinsicBounds(null, null, context.getResources().getDrawable(R.mipmap.drop_down_checked), null);
             } else {
                 viewHolder.mText.setTextColor(context.getResources().getColor(R.color.drop_down_unselected));
-                viewHolder.mText.setBackgroundResource(R.color.white);
+                viewHolder.mText.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
             }
         }
     }
@@ -81,4 +82,5 @@ public class ListDropDownAdapter extends BaseAdapter {
             ButterKnife.bind(this, view);
         }
     }
+
 }

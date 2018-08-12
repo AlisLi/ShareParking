@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout
+        <!--<LinearLayout
         android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -51,6 +51,68 @@
                 android:layout_height="wrap_content"
                 android:textSize="16sp"/>
 
+        </LinearLayout>-->
+
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:layout_marginRight="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="@string/ordering_state"/>
+
+            <TextView
+                android:id="@+id/txt_ordering_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="@string/ordering_id"/>
+
+            <TextView
+                android:id="@+id/txt_ordering_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="@string/parking_owner_id"/>
+
+            <TextView
+                android:id="@+id/txt_parking_owner_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"/>
+
         </LinearLayout>
 
         <LinearLayout
@@ -69,11 +131,32 @@
                 android:id="@+id/txt_parking_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/cornflowerblue"
                 android:textSize="16sp"/>
 
         </LinearLayout>
 
         <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="@string/parking_detail_address"/>
+
+            <TextView
+                android:id="@+id/txt_parking_detail_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"/>
+
+        </LinearLayout>
+
+        <!--<LinearLayout
             android:layout_marginTop="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -91,7 +174,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="16sp"/>
 
-        </LinearLayout>
+        </LinearLayout>-->
 
         <LinearLayout
             android:layout_marginTop="5dp"
@@ -141,19 +224,19 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/btn_rent_control"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:onClick="controlParking"
                 android:text="@string/control"/>
 
             <Button
+                android:id="@+id/btn_rent_confirm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:textSize="14sp"
-                android:onClick="stopRent"
-                android:text="@string/stop_rent"/>
+                android:text="@string/confirm_rent"/>
 
         </LinearLayout>
 

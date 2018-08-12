@@ -5,7 +5,66 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.example.sharingparking.baidumap.MapActivity">
+
+    <!--<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/detail_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="江西省南昌市南昌县东莲路" />
+
+        &lt;!&ndash;<EditText
+            android:id="@+id/geocodekey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="南昌县东莲路" />&ndash;&gt;
+
+        <Button
+            android:id="@+id/geocode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:onClick="searchButtonProcess"
+            android:text="Geo" />
+    </LinearLayout>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/lat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:inputType="numberDecimal|numberSigned"
+            android:text="28.583909" />
+
+        <EditText
+            android:id="@+id/lon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal|numberSigned"
+            android:text="115.889911" />
+
+        <Button
+            android:id="@+id/reversegeocode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="searchButtonProcess"
+            android:text="ReverseGeo" />
+    </LinearLayout>-->
 
     <com.baidu.mapapi.map.MapView
         android:id="@+id/mMapView"
@@ -52,20 +111,5 @@
         android:visibility="gone"
         app:layout_anchorGravity="bottom|end"
         app:srcCompat="@mipmap/ic_mn" />
-
-    <!--手动添加车位按钮-->
-<!--    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/registerCarParking"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="100dp"
-        android:layout_marginLeft="10dp"
-        app:layout_anchorGravity="bottom|end"
-        android:onClick="registerCarParking"
-        android:text="注册车位"
-        app:srcCompat="@mipmap/registercarparking"/>-->
 
 </RelativeLayout>

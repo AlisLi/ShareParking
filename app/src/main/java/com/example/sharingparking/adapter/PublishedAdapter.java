@@ -95,10 +95,12 @@ public class PublishedAdapter extends RecyclerView.Adapter<PublishedAdapter.View
         }
 
         holder.txtPublishState.setText(handlePublishState(publish.getPublishState()));
+
         holder.btnCancelPublish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //利用接口，处理点击事件
+                Log.d(TAG,mPublishedInterface.toString());
                 mPublishedInterface.cancelPublished(publish.getPublishId());
             }
         });
@@ -109,6 +111,7 @@ public class PublishedAdapter extends RecyclerView.Adapter<PublishedAdapter.View
     public int getItemCount() {
         return mPublishes.size();
     }
+
 
     public interface PublishedInterface{
         //取消发布
